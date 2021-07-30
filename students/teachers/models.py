@@ -12,4 +12,3 @@ class Teacher(models.Model):
                f'First name: {self.first_name}, ' \
                f'Last name: {self.last_name}, ' \
                f'Age: {self.age}'
-

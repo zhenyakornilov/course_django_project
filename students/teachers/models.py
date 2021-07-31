@@ -8,7 +8,8 @@ class Teacher(models.Model):
     age = models.IntegerField('Age')
 
     def __str__(self):
-        return f'Subject: {self.subject}, ' \
+        return f'ID: {self.id}, '\
+               f'Subject: {self.subject}, ' \
                f'First name: {self.first_name}, ' \
                f'Last name: {self.last_name}, ' \
                f'Age: {self.age}'

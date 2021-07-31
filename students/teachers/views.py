@@ -4,7 +4,21 @@ from .models import Teacher
 
 
 def show_all_teachers(request):
-    teachers = Teacher.objects.all()
+    filter_params = {}
+
+    teacher_first_name = request.GET.get('first_name', '')
+    if teacher_first_name:
+        filter_params['first_name'] = teacher_first_name
+
+    teacher_last_name = request.GET.get('last_name', '')
+    if teacher_last_name:
+        filter_params['last_name'] = teacher_last_name
+
+    teacher_age = request.GET.get('age', '')
+    if teacher_age:
+        filter_params['age'] = teacher_age
+
+    teachers = Teacher.objects.filter(**filter_params)
     result_dict = {}
     for teacher in teachers:
         counter = teacher.id

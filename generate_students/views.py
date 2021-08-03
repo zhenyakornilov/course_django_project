@@ -1,7 +1,9 @@
 from django.http import HttpResponse, JsonResponse
-from .models import Student
 
 from faker import Faker
+
+from .models import Student
+
 
 fake = Faker()
 
@@ -26,7 +28,7 @@ def generate_students(request):
     count = request.GET.get('count', '0')
     if count.isnumeric() and 0 < int(count) <= 100:
         result_dict = {}
-        for i in range(1, int(count)+1):
+        for i in range(1, int(count) + 1):
             student_obj = Student.objects.create(first_name=fake.first_name(),
                                                  last_name=fake.last_name(),
                                                  age=fake.random_int(18, 26))

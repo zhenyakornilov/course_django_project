@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+
 from .models import Group
 
 
@@ -12,5 +13,3 @@ def show_all_groups(request):
         result_dict.update({counter: inside_dict})
 
     return JsonResponse(result_dict)
-
-

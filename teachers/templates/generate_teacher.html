@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+    <h2>Teacher creation form</h2>
+
+    <form action="/generate-teacher/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+
+    </body>
+</html>

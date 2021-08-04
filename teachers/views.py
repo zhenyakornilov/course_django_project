@@ -1,6 +1,22 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 
+from .forms import TeacherForm
 from .models import Teacher
+
+
+def generate_teacher(request):
+    if request.method == 'POST':
+        form = TeacherForm(request.POST)
+
+        if form.is_valid():
+            Teacher.objects.create(**form.cleaned_data)
+            return HttpResponse('Teacher created!')
+
+    elif request.method == 'GET':
+        form = TeacherForm()
+
+    return render(request, 'generate_teacher.html', {'form': form})
 
 
 def show_all_teachers(request):

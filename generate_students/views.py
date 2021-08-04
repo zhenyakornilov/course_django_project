@@ -1,7 +1,9 @@
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 
 from faker import Faker
 
+from .forms import StudentForm
 from .models import Student
 
 
@@ -12,16 +14,29 @@ def main_page(request):
     return HttpResponse('<h1>Python course homework №4</h1>')
 
 
-def generate_one_student(request):
-    student = Student.objects.create(first_name=fake.first_name(),
-                                     last_name=fake.last_name(),
-                                     age=fake.random_int(18, 26))
-    result_dict = {student.id: {'ID': student.id,
-                                'First name': student.first_name,
-                                'Last name': student.last_name,
-                                'Age': student.age}}
+def generate_student(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
 
-    return JsonResponse(result_dict)
+        if form.is_valid():
+            Student.objects.create(**form.cleaned_data)
+            return HttpResponse('Student created!')
+
+    elif request.method == 'GET':
+        form = StudentForm()
+
+    return render(request, 'generate_students.html', {'form': form})
+
+    # previous version of function 'generate_student'
+    # student = Student.objects.create(first_name=fake.first_name(),
+    #                                  last_name=fake.last_name(),
+    #                                  age=fake.random_int(18, 26))
+    # result_dict = {student.id: {'ID': student.id,
+    #                             'First name': student.first_name,
+    #                             'Last name': student.last_name,
+    #                             'Age': student.age}}
+    #
+    # return JsonResponse(result_dict)
 
 
 def generate_students(request):

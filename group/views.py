@@ -1,6 +1,22 @@
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 
+from . forms import GroupForm
 from .models import Group
+
+
+def create_group(request):
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+
+        if form.is_valid():
+            Group.objects.create(**form.cleaned_data)
+            return HttpResponse('Group created!')
+
+    elif request.method == 'GET':
+        form = GroupForm()
+
+    return render(request, 'create_group.html', {'form': form})
 
 
 def show_all_groups(request):

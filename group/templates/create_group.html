@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <body>
+
+    <h2>Group creation form</h2>
+
+    <form action="/create-group/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+
+    </body>
+</html>

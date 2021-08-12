@@ -21,7 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('project-debug/', include(debug_toolbar.urls)),
-    path('', include('generate_students.urls')),
+    path('', include('students.urls')),
     path('', include('group.urls')),
     path('', include('teachers.urls')),
 ]

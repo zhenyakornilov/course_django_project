@@ -25,7 +25,7 @@ def generate_student(request):
     elif request.method == 'GET':
         form = StudentForm()
 
-    return render(request, 'generate_students.html', {'form': form})
+    return render(request, 'students/generate_students.html', {'form': form})
 
     # previous version of function 'generate_student'
     # student = Student.objects.create(first_name=fake.first_name(),

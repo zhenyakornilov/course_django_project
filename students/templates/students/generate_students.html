@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <body>
+{% extends "students/base.html" %}
 
-    <h2>Student creation form</h2>
 
+{% block content %}
+    <h1>Student creation form</h1>
     <form action="/generate-student/" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Submit">
     </form>
-
-    </body>
-</html>
+{% endblock %}

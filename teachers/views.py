@@ -16,7 +16,7 @@ def generate_teacher(request):
     elif request.method == 'GET':
         form = TeacherForm()
 
-    return render(request, 'generate_teacher.html', {'form': form})
+    return render(request, 'teachers/generate_teacher.html', {'form': form})
 
 
 def show_all_teachers(request):

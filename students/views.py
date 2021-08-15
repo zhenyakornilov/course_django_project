@@ -76,15 +76,29 @@ def edit_student(request, student_id):
 
 
 def delete_student(request, student_id):
-    if request.method == 'GET':
-        Student.objects.filter(id=student_id).delete()
-        return HttpResponseRedirect(reverse('all-students'))
-
-    return render(request, 'students/students_list.html', {'student_id': student_id})
+    Student.objects.filter(id=student_id).delete()
+    return HttpResponseRedirect(reverse('all-students'))
 
 
 def show_all_students(request):
-    students_list = Student.objects.all()
+    filter_params = {}
+    student_id = request.GET.get('id', '')
+    if student_id:
+        filter_params['id'] = teacher_id
+
+    student_first_name = request.GET.get('first_name', '')
+    if student_first_name:
+        filter_params['first_name'] = student_first_name
+
+    student_last_name = request.GET.get('last_name', '')
+    if student_last_name:
+        filter_params['last_name'] = student_last_name
+
+    student_age = request.GET.get('age', '')
+    if student_age:
+        filter_params['age'] = student_age
+
+    students_list = Student.objects.filter(**filter_params)
     return render(request, 'students/students_list.html', {'students': students_list})
 
     # previous version of function

@@ -20,19 +20,27 @@ def create_teacher(request):
 
 def edit_teacher(request, teacher_id):
     if request.method == 'POST':
-        form = StudentForm(request.POST)
+        form = TeacherForm(request.POST)
         if form.is_valid():
             Teacher.objects.update_or_create(defaults=form.cleaned_data, id=teacher_id)
             return HttpResponseRedirect(reverse('all-teachers'))
     else:
         teacher = Teacher.objects.filter(id=teacher_id).first()
-        form = TeacherForm(model_to_dict(student))
+        form = TeacherForm(model_to_dict(teacher))
 
     return render(request, 'teachers/teacher_edit_form.html', {'form': form, 'teacher_id': teacher_id})
 
 
+def delete_teacher(request, teacher_id):
+    teacher = Teacher.objects.filter(id=teacher_id).delete()
+    return HttpResponseRedirect(reverse('all-teachers'))
+
+
 def show_all_teachers(request):
     filter_params = {}
+    teacher_id = request.GET.get('id', '')
+    if teacher_id:
+        filter_params['id'] = teacher_id
 
     teacher_first_name = request.GET.get('first_name', '')
     if teacher_first_name:
@@ -49,6 +57,7 @@ def show_all_teachers(request):
     teachers_list = Teacher.objects.filter(**filter_params)
     return render(request, 'teachers/teachers_list.html', {'teachers': teachers_list})
 
+    # previous block of function
     # result_dict = {}
     # for teacher in teachers:
     #     counter = teacher.id

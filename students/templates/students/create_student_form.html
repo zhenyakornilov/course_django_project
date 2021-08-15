@@ -2,15 +2,10 @@
 {% block head %}
     {{ block.super }}
     <title>Student creation form</title>
-    <style type="text/css">
-        body {
-            background-color: darkcyan;
-        }
-    </style>
 {% endblock %}
 {% block content %}
     <h1>Student creation form</h1>
-    <form action="/generate-student/" method="post">
+    <form action="/create-student/" method="post">
         {% csrf_token %}
         <table>
             {{ form.as_table }}

@@ -5,6 +5,47 @@
         <style type="text/css">
             body {
                 font-family: Geneva, Arial, Helvetica, sans-serif;
+                background-color: darkcyan;
+            }
+            table,
+            td,
+            th {
+                padding: 5px;
+                border: 2px solid black;
+                border-radius: 5px;
+                background-color: gray;
+                text-align: left;
+            }
+            .button {
+                border: none;
+                border-radius: 5px;
+                padding: 1px 2px;
+                text-align: center;
+                display: inline-flex;
+                font-size: 16px;
+                margin: 1px 1px;
+                transition-duration: 0.5s;
+            }
+            .button1 {
+                background-color: darkgray;
+                color: black;
+                border: 2px solid darkcyan;
+            }
+
+            .button1:hover {
+                background-color: darkcyan;
+                color: white;
+            }
+
+            .button2 {
+                background-color: darkgray;
+                color: black;
+                border: 2px solid darkred;
+            }
+
+            .button2:hover {
+                background-color: darkred;
+                color: white;
             }
         </style>
     {% endblock %}

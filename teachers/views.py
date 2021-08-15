@@ -1,22 +1,34 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
-
+from django.urls import reverse
+from django.forms.models import model_to_dict
 from .forms import TeacherForm
 from .models import Teacher
 
 
-def generate_teacher(request):
+def create_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
-
         if form.is_valid():
             Teacher.objects.create(**form.cleaned_data)
-            return HttpResponse('Teacher created!')
-
-    elif request.method == 'GET':
+            return HttpResponseRedirect(reverse('all-teachers'))
+    else:
         form = TeacherForm()
 
-    return render(request, 'teachers/generate_teacher.html', {'form': form})
+    return render(request, 'teachers/create_teacher_form.html', {'form': form})
+
+
+def edit_teacher(request, teacher_id):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            Teacher.objects.update_or_create(defaults=form.cleaned_data, id=teacher_id)
+            return HttpResponseRedirect(reverse('all-teachers'))
+    else:
+        teacher = Teacher.objects.filter(id=teacher_id).first()
+        form = TeacherForm(model_to_dict(student))
+
+    return render(request, 'teachers/teacher_edit_form.html', {'form': form, 'teacher_id': teacher_id})
 
 
 def show_all_teachers(request):
@@ -34,15 +46,17 @@ def show_all_teachers(request):
     if teacher_age:
         filter_params['age'] = teacher_age
 
-    teachers = Teacher.objects.filter(**filter_params)
-    result_dict = {}
-    for teacher in teachers:
-        counter = teacher.id
-        inside_dict = {'ID': teacher.id,
-                       'Subject': teacher.subject,
-                       'First name': teacher.first_name,
-                       'Last name': teacher.last_name,
-                       'Age': teacher.age}
-        result_dict.update({counter: inside_dict})
+    teachers_list = Teacher.objects.filter(**filter_params)
+    return render(request, 'teachers/teachers_list.html', {'teachers': teachers_list})
 
-    return JsonResponse(result_dict)
+    # result_dict = {}
+    # for teacher in teachers:
+    #     counter = teacher.id
+    #     inside_dict = {'ID': teacher.id,
+    #                    'Subject': teacher.subject,
+    #                    'First name': teacher.first_name,
+    #                    'Last name': teacher.last_name,
+    #                    'Age': teacher.age}
+    #     result_dict.update({counter: inside_dict})
+    #
+    # return JsonResponse(result_dict)

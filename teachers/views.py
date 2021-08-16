@@ -1,6 +1,5 @@
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render
-from django.urls import reverse
 
 from .forms import TeacherForm
 from .models import Teacher
@@ -11,7 +10,7 @@ def create_teacher(request):
         form = TeacherForm(request.POST)
         if form.is_valid():
             Teacher.objects.create(**form.cleaned_data)
-            return redirect(reverse('all-teachers'))
+            return redirect('all-teachers')
     else:
         form = TeacherForm()
 
@@ -23,7 +22,7 @@ def edit_teacher(request, teacher_id):
         form = TeacherForm(request.POST)
         if form.is_valid():
             Teacher.objects.update_or_create(defaults=form.cleaned_data, id=teacher_id)
-            return redirect(reverse('all-teachers'))
+            return redirect('all-teachers')
     else:
         teacher = Teacher.objects.filter(id=teacher_id).first()
         form = TeacherForm(model_to_dict(teacher))
@@ -33,7 +32,7 @@ def edit_teacher(request, teacher_id):
 
 def delete_teacher(request, teacher_id):
     Teacher.objects.filter(id=teacher_id).delete()
-    return redirect(reverse('all-teachers'))
+    return redirect('all-teachers')
 
 
 def show_all_teachers(request):

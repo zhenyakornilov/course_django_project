@@ -1,7 +1,7 @@
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
+
 
 from faker import Faker
 
@@ -20,7 +20,7 @@ def create_student(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             Student.objects.create(**form.cleaned_data)
-            return redirect(reverse('all-students'))
+            return redirect('all-students')
     else:
         form = StudentForm()
 
@@ -67,7 +67,7 @@ def edit_student(request, student_id):
         form = StudentForm(request.POST)
         if form.is_valid():
             Student.objects.update_or_create(defaults=form.cleaned_data, id=student_id)
-            return redirect(reverse('all-students'))
+            return redirect('all-students')
     else:
         student = Student.objects.filter(id=student_id).first()
         form = StudentForm(model_to_dict(student))
@@ -77,7 +77,7 @@ def edit_student(request, student_id):
 
 def delete_student(request, student_id):
     Student.objects.filter(id=student_id).delete()
-    return redirect(reverse('all-students'))
+    return redirect('all-students')
 
 
 def show_all_students(request):

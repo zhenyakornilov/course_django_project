@@ -1,6 +1,9 @@
 from django.apps import AppConfig
 
 
-class GenerateStudentsConfig(AppConfig):
+class StudentsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'students'
+
+    def ready(self):
+        from .handlers import capitalize_first_last_name

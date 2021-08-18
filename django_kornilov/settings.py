@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'students',
-    'teachers',
-    'group',
+    'students.apps.StudentsConfig',
+    'teachers.apps.TeachersConfig',
+    'group.apps.GroupConfig',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +121,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

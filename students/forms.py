@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 def validate_phone_number(form_phone_number):
     if not re.match(r"^380\d{9}$", form_phone_number):
-        raise ValidationError('Enter phone number in 380xxxxxxxxx format')
+        raise ValidationError(f'{form_phone_number} : Enter phone number in 380xxxxxxxxx format')
 
 
 class StudentForm(forms.Form):

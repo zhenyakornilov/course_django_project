@@ -1,4 +1,3 @@
-import re
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -12,4 +11,3 @@ def capitalize_student_fullname(sender, **kwargs):
         kwargs['instance'].first_name = first_name.capitalize()
     if last_name := kwargs['instance'].last_name:
         kwargs['instance'].last_name = last_name.capitalize()
-

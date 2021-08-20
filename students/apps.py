@@ -1,3 +1,4 @@
+
 from django.apps import AppConfig
 
 
@@ -6,4 +7,4 @@ class StudentsConfig(AppConfig):
     name = 'students'
 
     def ready(self):
-        from .handlers import capitalize_first_last_name
+        from .handlers import capitalize_first_last_name  # noqa: F401

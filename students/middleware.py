@@ -1,7 +1,4 @@
 import time
-import datetime
-
-from .views import create_student
 
 from .models import Logger
 
@@ -15,13 +12,9 @@ class LogMiddleware:
             t1 = time.time()
             response = self.get_response(request)
             t2 = time.time()
-            execution_time = t2-t1
+            execution_time = t2 - t1
             Logger.objects.create(method=request.method, path=request.path, execution_time=execution_time)
             return response
         else:
             response = self.get_response(request)
             return response
-
-
-
-

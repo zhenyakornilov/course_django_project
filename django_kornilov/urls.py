@@ -25,4 +25,3 @@ urlpatterns = [
     path('', include('group.urls')),
     path('', include('teachers.urls')),
 ]
-

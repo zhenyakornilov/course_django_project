@@ -19,7 +19,8 @@ def create_student(request):
     if request.method == 'POST':
         form = StudentForm(request.POST)
         if form.is_valid():
-            Student.objects.create(**form.cleaned_data)
+            student_obj = Student(**form.cleaned_data)
+            student_obj.save()
             return redirect('all-students')
     else:
         form = StudentForm()

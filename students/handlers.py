@@ -13,8 +13,3 @@ def capitalize_student_fullname(sender, **kwargs):
     if last_name := kwargs['instance'].last_name:
         kwargs['instance'].last_name = last_name.capitalize()
 
-
-@receiver(pre_save, sender=Student)
-def format_phone_number(sender, **kwargs):
-    if phone_number := kwargs['instance'].phone_number:
-        kwargs['instance'].phone_number = re.sub(r"\D", "", phone_number)

@@ -16,7 +16,7 @@ def create_group(request):
     elif request.method == 'GET':
         form = GroupForm()
 
-    return render(request, 'create_group.html', {'form': form})
+    return render(request, 'group/create_group.html', {'form': form})
 
 
 def show_all_groups(request):

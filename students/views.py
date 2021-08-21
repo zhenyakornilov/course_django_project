@@ -1,11 +1,12 @@
+from django.forms.models import model_to_dict
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
 
 from faker import Faker
 
 from .forms import StudentForm
 from .models import Student
-
 
 fake = Faker()
 
@@ -14,18 +15,16 @@ def main_page(request):
     return HttpResponse('<h1>Python course homework №4</h1>')
 
 
-def generate_student(request):
+def create_student(request):
     if request.method == 'POST':
         form = StudentForm(request.POST)
-
         if form.is_valid():
             Student.objects.create(**form.cleaned_data)
-            return HttpResponse('Student created!')
-
-    elif request.method == 'GET':
+            return redirect('all-students')
+    else:
         form = StudentForm()
 
-    return render(request, 'generate_students.html', {'form': form})
+    return render(request, 'students/create_student_form.html', {'form': form})
 
     # previous version of function 'generate_student'
     # student = Student.objects.create(first_name=fake.first_name(),
@@ -63,15 +62,54 @@ def generate_students(request):
         return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
 
 
-def show_all_students(request):
-    students = Student.objects.all()
-    result_dict = {}
-    for student in students:
-        counter = student.id
-        inside_dict = {'ID': student.id,
-                       'First name': student.first_name,
-                       'Last name': student.last_name,
-                       'Age': student.age}
-        result_dict.update({counter: inside_dict})
+def edit_student(request, student_id):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            Student.objects.update_or_create(defaults=form.cleaned_data, id=student_id)
+            return redirect('all-students')
+    else:
+        student = Student.objects.filter(id=student_id).first()
+        form = StudentForm(model_to_dict(student))
 
-    return JsonResponse(result_dict)
+    return render(request, 'students/student_edit_form.html', {'form': form, 'student_id': student_id})
+
+
+def delete_student(request, student_id):
+    Student.objects.filter(id=student_id).delete()
+    return redirect('all-students')
+
+
+def show_all_students(request):
+    filter_params = {}
+    student_id = request.GET.get('id', '')
+    if student_id:
+        filter_params['id'] = student_id
+
+    student_first_name = request.GET.get('first_name', '')
+    if student_first_name:
+        filter_params['first_name'] = student_first_name
+
+    student_last_name = request.GET.get('last_name', '')
+    if student_last_name:
+        filter_params['last_name'] = student_last_name
+
+    student_age = request.GET.get('age', '')
+    if student_age:
+        filter_params['age'] = student_age
+
+    students_list = Student.objects.filter(**filter_params)
+    return render(request, 'students/students_list.html', {'students': students_list})
+
+    # previous version of function
+    # students = Student.objects.all()
+    # result_dict = {}
+    # for student in students:
+    #     counter = student.id
+    #     inside_dict = {'ID': student.id,
+    #                    'First name': student.first_name,
+    #                    'Last name': student.last_name,
+    #                    'Age': student.age}
+    #     result_dict.update({counter: inside_dict})
+    #
+    # return JsonResponse(result_dict)

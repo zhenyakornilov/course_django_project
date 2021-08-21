@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ block.super }}
+    <title>All Teachers</title>
+    <style type="text/css">
+        body {
+            background-color: darksalmon;
+        }
+        .button1 {
+            border: 2px solid darksalmon;
+        }
+
+        .button1:hover {
+            background-color: darksalmon;
+        }
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <table>
+        <th>ID</th>
+        <th>Subject</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Age</th>
+        <th>Edit data</th>
+        <th>Delete from base</th>
+        {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.id|safe }}</td>
+                <td>{{ teacher.subject }}</td>
+                <td>{{ teacher.first_name }}</td>
+                <td>{{ teacher.last_name }}</td>
+                <td>{{ teacher.age }}</td>
+                <td>
+                    <a href="{% url 'edit-teacher' teacher.id %}">
+                        <button class="button button1 ">Edit</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'delete-teacher' teacher.id %}">
+                        <button class="button button2">Delete</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

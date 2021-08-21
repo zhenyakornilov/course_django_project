@@ -12,7 +12,7 @@ fake = Faker()
 
 
 def main_page(request):
-    return HttpResponse('<h1>Python course homework №4</h1>')
+    return render(request, 'students/index.html')
 
 
 def create_student(request):

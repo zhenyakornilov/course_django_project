@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -5,8 +6,9 @@ from django.shortcuts import redirect, render
 
 from faker import Faker
 
-from .forms import StudentForm
+from .forms import GenerateStudentsForm, StudentForm
 from .models import Student
+from .tasks import generate_random_students
 
 fake = Faker()
 
@@ -115,3 +117,17 @@ def show_all_students(request):
     #     result_dict.update({counter: inside_dict})
     #
     # return JsonResponse(result_dict)
+
+
+def generate_students_from_from(request):
+    if request.method == 'POST':
+        form = GenerateStudentsForm(request.POST)
+        if form.is_valid():
+            total = form.cleaned_data.get('total')
+            generate_random_students.delay(total)
+            messages.success(request, 'We are generating random students! Wait a moment and refresh this page.')
+            return redirect('all-students')
+    else:
+        form = GenerateStudentsForm()
+
+    return render(request, 'students/student_generator.html', {'form': form})

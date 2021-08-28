@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+from celery.schedules import crontab
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -137,4 +139,12 @@ INTERNAL_IPS = [
 CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
 CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_TASK_TRACK_STARTED = True
-# Celery settings
+
+
+# Celery scheduler
+CELERY_BEAT_SCHEDULE = {
+    'beat_print_hello': {
+        'task': 'students.tasks.delete_logs',
+        'schedule': crontab(minute=0, hour=6),
+    }
+}

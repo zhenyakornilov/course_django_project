@@ -2,7 +2,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 def validate_phone_number(form_phone_number):
@@ -23,6 +23,6 @@ class GenerateStudentsForm(forms.Form):
     total = forms.IntegerField(
         validators=[
             MinValueValidator(10),
-            MaxValueValidator(100000)
+            MaxValueValidator(500)
         ]
     )

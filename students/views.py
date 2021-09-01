@@ -12,14 +12,15 @@ fake = Faker()
 
 
 def main_page(request):
-    return HttpResponse('<h1>Python course homework №4</h1>')
+    return render(request, 'students/index.html')
 
 
 def create_student(request):
     if request.method == 'POST':
         form = StudentForm(request.POST)
         if form.is_valid():
-            Student.objects.create(**form.cleaned_data)
+            student_obj = Student(**form.cleaned_data)
+            student_obj.save()
             return redirect('all-students')
     else:
         form = StudentForm()
@@ -43,9 +44,10 @@ def generate_students(request):
     if count.isnumeric() and 0 < int(count) <= 100:
         result_dict = {}
         for i in range(1, int(count) + 1):
-            student_obj = Student.objects.create(first_name=fake.first_name(),
-                                                 last_name=fake.last_name(),
-                                                 age=fake.random_int(18, 26))
+            student_obj = Student(first_name=fake.first_name(),
+                                  last_name=fake.last_name(),
+                                  age=fake.random_int(18, 26))
+            student_obj.save()
             counter = student_obj.id
             inside_dict = {'ID': student_obj.id,
                            'First name': student_obj.first_name,

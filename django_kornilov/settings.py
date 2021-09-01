@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'students',
-    'teachers',
-    'group',
+    'students.apps.StudentsConfig',
+    'teachers.apps.TeachersConfig',
+    'group.apps.GroupConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'students.middleware.LogMiddleware',
 ]
 
 ROOT_URLCONF = 'django_kornilov.urls'
@@ -120,7 +121,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

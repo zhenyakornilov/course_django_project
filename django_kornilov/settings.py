@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
     'teachers.apps.TeachersConfig',
     'group.apps.GroupConfig',
+    'mail_processing.apps.MailProcessingConfig',
 ]
 
 MIDDLEWARE = [

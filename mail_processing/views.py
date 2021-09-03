@@ -10,6 +10,7 @@ def show_contact_form(request):
         form = ContactUsForm(request.POST)
         if form.is_valid():
             proceed_contact_us_form.delay(
+                contact_name=form.cleaned_data.get('contact_name'),
                 title=form.cleaned_data.get('title'),
                 message=form.cleaned_data.get('message'),
                 email_from=form.cleaned_data.get('email_from')

@@ -144,7 +144,7 @@ CELERY_TASK_TRACK_STARTED = True
 
 # Celery scheduler
 CELERY_BEAT_SCHEDULE = {
-    'beat_print_hello': {
+    'beat_delete_logs': {
         'task': 'students.tasks.delete_logs',
         'schedule': crontab(minute=0, hour=6),
     }
@@ -158,5 +158,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-
-

@@ -2,6 +2,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 def validate_phone_number(form_phone_number):
@@ -16,3 +17,12 @@ class StudentForm(forms.Form):
     phone_number = forms.CharField(label='Student\'s phone', required=False,
                                    empty_value=None, validators=[validate_phone_number],
                                    widget=forms.TextInput(attrs={'placeholder': '380xxxxxxxxx'}))
+
+
+class GenerateStudentsForm(forms.Form):
+    total = forms.IntegerField(
+        validators=[
+            MinValueValidator(10),
+            MaxValueValidator(500)
+        ]
+    )

@@ -158,3 +158,6 @@ dmypy.json
 cython_debug/
 =======
 >>>>>>> a3e7719d8d32b21aa99ccfe0fae43d360e34bc73
+
+# celery
+celerybeat-schedule.*

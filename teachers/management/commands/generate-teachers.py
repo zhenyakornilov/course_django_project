@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 result.append(student)
 
             Student.objects.bulk_create(result)
-            monitor = Student.objects.last()
+            monitor = Student.objects.filter(group_id=group.id).last()
 
             group.students_in_group = len(result)
             group.group_curator = teacher

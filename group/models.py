@@ -3,7 +3,7 @@ from django.db import models
 
 class Group(models.Model):
     group_name = models.CharField('Group Name', max_length=200, db_column='Group name')
-    students_in_group = models.IntegerField('Students in group', db_column='Students in group')
+    students_in_group = models.IntegerField('Students in group', null=True, db_column='Students in group')
 
     group_curator = models.OneToOneField("teachers.Teacher", null=True,
                                          on_delete=models.CASCADE, db_column='Group curator ID')

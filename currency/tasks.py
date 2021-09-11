@@ -12,13 +12,13 @@ def get_currency_rates():
     response_nbank = requests.get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
 
     for rate in response_monobank.json():
-        if rate.get('currencyCodeA') not in [code for code in currency_codes]:
+        if rate.get('currencyCodeA') not in currency_codes or rate.get('currencyCodeB') in currency_codes:
             continue
-        elif rate.get('currencyCodeA') == currency_codes[0] and rate.get('currencyCodeB') not in currency_codes:
+        elif rate.get('currencyCodeA') == currency_codes[0]:
             letter_code = 'USD'
-        elif rate.get('currencyCodeA') == currency_codes[1] and rate.get('currencyCodeB') not in currency_codes:
+        elif rate.get('currencyCodeA') == currency_codes[1]:
             letter_code = 'EUR'
-        elif rate.get('currencyCodeA') == currency_codes[2] and rate.get('currencyCodeB') not in currency_codes:
+        elif rate.get('currencyCodeA') == currency_codes[2]:
             letter_code = 'RUB'
         currency_monobank = Currency(
             currency=str(letter_code),

@@ -5,4 +5,3 @@ from . import views
 urlpatterns = [
     path('currency/', views.CurrencyListView.as_view(), name='currency-list')
 ]
-

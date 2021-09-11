@@ -2,9 +2,12 @@ from django.db import models
 
 
 class Currency(models.Model):
-    CURRENCIES = (
+    CURRENCIES = [
+        ('USD', 'US Dollar'),
+        ('EUR', 'Euro'),
+        ('RUB', 'Ruble'),
+    ]
 
-    )
     created_at = models.DateTimeField(auto_now=True, db_column='Creation date')
     currency = models.CharField(max_length=4, choices=CURRENCIES, db_column='Currency')
     source = models.CharField(max_length=20, db_column='Source')

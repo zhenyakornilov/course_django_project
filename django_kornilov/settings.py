@@ -149,6 +149,10 @@ CELERY_BEAT_SCHEDULE = {
     'beat_delete_logs': {
         'task': 'students.tasks.delete_logs',
         'schedule': crontab(minute=0, hour=6),
+    },
+    'currency': {
+        'task': 'currency.tasks.get_currency_rates',
+        'schedule': 30
     }
 }
 

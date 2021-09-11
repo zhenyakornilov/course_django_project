@@ -11,4 +11,4 @@ class Group(models.Model):
                                          on_delete=models.CASCADE, db_column='Group monitor ID')
 
     def __str__(self):
-        return self.group_name, self.students_in_group, self.group_curator.first_name
+        return f'{self.group_name}, {self.students_in_group}'

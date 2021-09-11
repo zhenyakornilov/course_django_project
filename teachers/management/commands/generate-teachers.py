@@ -35,11 +35,11 @@ class Command(BaseCommand):
                 student = Student(first_name=fake.first_name(),
                                   last_name=fake.last_name(),
                                   age=fake.random_int(18, 26),
-                                  group_id=group)
+                                  in_group=group)
                 result.append(student)
 
             Student.objects.bulk_create(result)
-            monitor = Student.objects.filter(group_id=group.id).last()
+            monitor = Student.objects.filter(in_group=group.id).last()
 
             group.students_in_group = len(result)
             group.group_curator = teacher

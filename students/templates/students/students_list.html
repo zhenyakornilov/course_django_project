@@ -11,6 +11,8 @@
         <th>Last name</th>
         <th>Age</th>
         <th>Phone number</th>
+        <th>Group ID</th>
+        <th>Group name</th>
         <th>Edit data</th>
         <th>Delete from base</th>
         {% for student in students %}
@@ -20,6 +22,8 @@
                 <td>{{ student.last_name }}</td>
                 <td>{{ student.age }}</td>
                 <td>{{ student.phone_number }}</td>
+                <td>{{ student.in_group.id }}</td>
+                <td>{{ student.in_group.group_name }}</td>
                 <td>
                     <a href="{% url 'edit-student' student.id %}">
                         <button class="button button1">Edit</button>

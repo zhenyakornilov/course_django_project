@@ -31,7 +31,7 @@ class Command(BaseCommand):
             group.save()
 
             result = []
-            for student in range(fake.random_int(0, 11)):
+            for student in range(fake.random_int(1, 10)):
                 student = Student(first_name=fake.first_name(),
                                   last_name=fake.last_name(),
                                   age=fake.random_int(18, 26),

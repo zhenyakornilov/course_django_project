@@ -14,6 +14,9 @@ class Currency(models.Model):
     price_for_buy = models.DecimalField(max_digits=15, decimal_places=6, db_column='Buy price')
     price_for_sell = models.DecimalField(max_digits=15, decimal_places=6, db_column='Sell price')
 
+    class Meta:
+        verbose_name_plural = 'Currencies'
+
     def __str__(self):
         return f"{self.created_at}::{self.currency}, {self.source}; " \
                f"BUY:{self.price_for_buy}, SELL:{self.price_for_sell}"

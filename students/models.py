@@ -22,3 +22,4 @@ class Logger(models.Model):
     path = models.CharField(max_length=200)
     execution_time = models.FloatField(null=False)
     created = models.DateTimeField(auto_now_add=True)
+

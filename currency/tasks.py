@@ -21,7 +21,7 @@ def get_currency_rates():
         elif rate.get('currencyCodeA') == currency_codes[2]:
             letter_code = 'RUB'
         currency_monobank = Currency(
-            currency=str(letter_code),
+            currency=letter_code,
             source='Monobank',
             price_for_buy=rate.get('rateBuy'),
             price_for_sell=rate.get('rateSell')

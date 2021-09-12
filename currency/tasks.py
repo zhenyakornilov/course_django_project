@@ -36,5 +36,5 @@ def get_currency_rates():
             source='National Bank',
             price_for_buy=rate.get('rate'),
             price_for_sell=rate.get('rate')
-            )
+        )
         currency_nbank.save()

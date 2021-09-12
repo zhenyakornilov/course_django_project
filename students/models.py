@@ -7,7 +7,8 @@ class Student(models.Model):
     age = models.IntegerField('Age', db_column='Age')
     phone_number = models.CharField(null=True, blank=True, unique=True, max_length=12, db_column='Phone number')
 
-    group_id = models.ForeignKey("group.Group", null=True, on_delete=models.CASCADE, db_column="Group ID")
+    in_group = models.ForeignKey("group.Group", null=True, on_delete=models.CASCADE,
+                                 db_column="Group ID", verbose_name='Group ID')
 
     def __str__(self):
         return f'First name: {self.first_name}, ' \

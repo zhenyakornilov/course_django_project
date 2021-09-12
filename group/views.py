@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from . forms import GroupForm
@@ -20,12 +20,14 @@ def create_group(request):
 
 
 def show_all_groups(request):
-    groups = Group.objects.all()
-    result_dict = {}
-    for group in groups:
-        counter = group.id
-        inside_dict = {'Group name': group.group_name,
-                       'Count of students': group.students_in_group}
-        result_dict.update({counter: inside_dict})
+    filter_params = {}
+    group_id = request.GET.get('id', '')
+    if group_id:
+        filter_params['id'] = group_id
 
-    return JsonResponse(result_dict)
+    group_name = request.GET.get('group_name', '')
+    if group_name:
+        filter_params['group_name'] = group_name
+
+    group_list = Group.objects.filter(**filter_params)
+    return render(request, 'group/group_list.html', {'groups': group_list})

@@ -1,11 +1,12 @@
-from random import randint
-
 from django.core.management.base import BaseCommand
 
 from faker import Faker
 
-from teachers.models import Teacher
+from group.models import Group
 
+from students.models import Student
+
+from teachers.models import Teacher
 
 teacher_subjects = ['Math', 'Physics', 'Chemistry', 'History',
                     'Music', 'Spanish', 'English', 'Computing', 'Geography']
@@ -19,11 +20,30 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         fake = Faker()
-
         for i in range(options['number_of_teachers']):
-            Teacher.objects.create(subject=teacher_subjects[randint(0, 8)],
-                                   first_name=fake.first_name(),
-                                   last_name=fake.last_name(),
-                                   age=fake.random_int(27, 60))
+            teacher = Teacher(subject=teacher_subjects[fake.random_int(0, 8)],
+                              first_name=fake.first_name(),
+                              last_name=fake.last_name(),
+                              age=fake.random_int(27, 60))
+            teacher.save()
+
+            group = Group(group_name=teacher.subject)
+            group.save()
+
+            result = []
+            for student in range(fake.random_int(0, 11)):
+                student = Student(first_name=fake.first_name(),
+                                  last_name=fake.last_name(),
+                                  age=fake.random_int(18, 26),
+                                  in_group=group)
+                result.append(student)
+
+            Student.objects.bulk_create(result)
+            monitor = Student.objects.filter(in_group=group.id).last()
+
+            group.students_in_group = len(result)
+            group.group_curator = teacher
+            group.group_monitor = monitor
+            group.save()
 
         self.stdout.write(self.style.SUCCESS(f"Successfully created {options['number_of_teachers']} teacher(s)"))

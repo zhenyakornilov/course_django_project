@@ -11,8 +11,7 @@ def get_currency_rates():
     response_monobank = requests.get('https://api.monobank.ua/bank/currency')
     response_nbank = requests.get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
 
-
-    print(f'Monobank response Status code: {response_monobank.status_code}')
+    print(f'Monobank response Status code: {response_monobank.status_code}')  # noqa: T001
     if response_monobank.status_code == 200:
         for rate in response_monobank.json():
             if rate.get('currencyCodeA') not in currency_codes or rate.get('currencyCodeB') in currency_codes:
@@ -31,7 +30,7 @@ def get_currency_rates():
             )
             currency_monobank.save()
 
-    print(f'National Bank response Status Code: {response_nbank.status_code}')
+    print(f'National Bank response Status Code: {response_nbank.status_code}')  # noqa: T001
     if response_nbank.status_code == 200:
         for rate in response_nbank.json():
             if rate.get('cc') not in [currency[0] for currency in Currency.CURRENCIES]:
@@ -45,6 +44,3 @@ def get_currency_rates():
             currency_nbank.save()
 
     return 'Currencies saved'
-
-
-

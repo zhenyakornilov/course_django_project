@@ -152,7 +152,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'currency': {
         'task': 'currency.tasks.get_currency_rates',
-        'schedule': 10
+        'schedule': crontab(minute=0, hour=0)
     }
 }
 

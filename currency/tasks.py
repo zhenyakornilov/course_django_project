@@ -11,6 +11,7 @@ def get_currency_rates():
     response_monobank = requests.get('https://api.monobank.ua/bank/currency')
     response_nbank = requests.get('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
 
+
     print(f'Monobank response Status code: {response_monobank.status_code}')
     if response_monobank.status_code == 200:
         for rate in response_monobank.json():
@@ -44,5 +45,6 @@ def get_currency_rates():
             currency_nbank.save()
 
     return 'Currencies saved'
+
 
 

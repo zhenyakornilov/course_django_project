@@ -7,7 +7,7 @@ env:
   -SECRET_KEY='TEST'
 script:
   - flake8 .
-  - manage.py
+  - python manage.py validate_templates
   - python manage.py check
   - python manage.py makemigrations --check --dry-run
   - pip check

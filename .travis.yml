@@ -6,3 +6,4 @@ install:
 script:
   - flake8 .
   - pip check
+  - python manage.py check

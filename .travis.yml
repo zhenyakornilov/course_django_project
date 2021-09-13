@@ -4,7 +4,7 @@ python:
 install:
   - pip install -r requirements.txt
 env:
-  - SECRET_KEY=new_key
+  - SECRET_KEY=$SECRET_KEY
 script:
   - flake8 .
   - pip check

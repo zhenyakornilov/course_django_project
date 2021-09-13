@@ -3,6 +3,8 @@ python:
   - "3.8"
 install:
   - pip install -r requirements.txt
+env:
+  - SECRET_KEY=new_key
 script:
   - flake8 .
   - pip check

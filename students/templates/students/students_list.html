@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block head %}
-    {{ block.super }}
-    <title>All Students</title>
 
+{% block head %}
+    <title>All Students</title>
+    {{ block.super }}
 {% endblock %}
 {% block content %}
     <table>
@@ -15,7 +15,7 @@
         <th>Group name</th>
         <th>Edit data</th>
         <th>Delete from base</th>
-        {% for student in students %}
+        {% for student in student_list %}
             <tr>
                 <td>{{ student.id|safe }}</td>
                 <td>{{ student.first_name }}</td>

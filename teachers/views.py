@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from .forms import TeacherForm
 from .models import Teacher
 
+from django.views.generic import ListView
+
 
 def create_teacher(request):
     if request.method == 'POST':
@@ -35,36 +37,23 @@ def delete_teacher(request, teacher_id):
     return redirect('all-teachers')
 
 
-def show_all_teachers(request):
-    filter_params = {}
-    teacher_id = request.GET.get('id', '')
-    if teacher_id:
-        filter_params['id'] = teacher_id
+class TeachersListView(ListView):
+    model = Teacher
+    template_name = 'teachers/teachers_list.html'
 
-    teacher_first_name = request.GET.get('first_name', '')
-    if teacher_first_name:
-        filter_params['first_name'] = teacher_first_name
-
-    teacher_last_name = request.GET.get('last_name', '')
-    if teacher_last_name:
-        filter_params['last_name'] = teacher_last_name
-
-    teacher_age = request.GET.get('age', '')
-    if teacher_age:
-        filter_params['age'] = teacher_age
-
-    teachers_list = Teacher.objects.filter(**filter_params)
-    return render(request, 'teachers/teachers_list.html', {'teachers': teachers_list})
-
-    # previous block of function
-    # result_dict = {}
-    # for teacher in teachers:
-    #     counter = teacher.id
-    #     inside_dict = {'ID': teacher.id,
-    #                    'Subject': teacher.subject,
-    #                    'First name': teacher.first_name,
-    #                    'Last name': teacher.last_name,
-    #                    'Age': teacher.age}
-    #     result_dict.update({counter: inside_dict})
-    #
-    # return JsonResponse(result_dict)
+    def get_queryset(self):
+        filter_params = {}
+        teacher_id = self.request.GET.get('id', '')
+        if teacher_id:
+            filter_params['id'] = teacher_id
+        teacher_first_name = self.request.GET.get('first_name', '')
+        if teacher_first_name:
+            filter_params['first_name'] = teacher_first_name
+        teacher_last_name = self.request.GET.get('last_name', '')
+        if teacher_last_name:
+            filter_params['last_name'] = teacher_last_name
+        teacher_age = self.request.GET.get('age', '')
+        if teacher_age:
+            filter_params['age'] = teacher_age
+        queryset = Teacher.objects.filter(**filter_params)
+        return queryset

@@ -1,10 +1,9 @@
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render
+from django.views.generic import ListView
 
 from .forms import TeacherForm
 from .models import Teacher
-
-from django.views.generic import ListView
 
 
 def create_teacher(request):

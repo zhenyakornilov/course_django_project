@@ -1,12 +1,10 @@
 from django.contrib import messages
-from django.forms.models import model_to_dict
+# from django.forms.models import model_to_dict
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-
-from django.views.generic import View, ListView
-
-from django.views.generic.edit import DeleteView
+from django.views.generic import ListView, View
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 
 from faker import Faker
@@ -23,17 +21,24 @@ class MainPage(View):
         return render(request, 'students/index.html')
 
 
-def create_student(request):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            student_obj = Student(**form.cleaned_data)
-            student_obj.save()
-            return redirect('all-students')
-    else:
-        form = StudentForm()
+class CreateStudentView(CreateView):
+    form_class = StudentForm
+    template_name = 'students/create_student_form.html'
 
-    return render(request, 'students/create_student_form.html', {'form': form})
+    def form_valid(self, form):
+        Student.objects.create(**form.cleaned_data)
+        return redirect('all-students')
+# def create_student(request):
+#     if request.method == 'POST':
+#         form = StudentForm(request.POST)
+#         if form.is_valid():
+#             student_obj = Student(**form.cleaned_data)
+#             student_obj.save()
+#             return redirect('all-students')
+#     else:
+#         form = StudentForm()
+#
+#     return render(request, 'students/create_student_form.html', {'form': form})
 
 
 def generate_students(request):
@@ -61,17 +66,24 @@ def generate_students(request):
         return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
 
 
-def edit_student(request, student_id):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            Student.objects.update_or_create(defaults=form.cleaned_data, id=student_id)
-            return redirect('all-students')
-    else:
-        student = Student.objects.filter(id=student_id).first()
-        form = StudentForm(model_to_dict(student))
+class EditStudentView(UpdateView):
+    model = Student
+    template_name = 'students/student_edit_form.html'
+    fields = ['first_name', 'last_name', 'age', 'phone_number']
+    success_url = reverse_lazy('all-students')
 
-    return render(request, 'students/student_edit_form.html', {'form': form, 'student_id': student_id})
+
+# def edit_student(request, student_id):
+#     if request.method == 'POST':
+#         form = StudentForm(request.POST)
+#         if form.is_valid():
+#             Student.objects.update_or_create(defaults=form.cleaned_data, id=student_id)
+#             return redirect('all-students')
+#     else:
+#         student = Student.objects.filter(id=student_id).first()
+#         form = StudentForm(model_to_dict(student))
+#
+#     return render(request, 'students/student_edit_form.html', {'form': form, 'student_id': student_id})
 
 
 class DeleteStudentView(DeleteView):

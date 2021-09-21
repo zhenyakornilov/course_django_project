@@ -1,8 +1,8 @@
-from django.forms.models import model_to_dict
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic import ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+
 
 from .forms import TeacherForm
 from .models import Teacher

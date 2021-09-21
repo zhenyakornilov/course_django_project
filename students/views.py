@@ -96,3 +96,11 @@ class GenerateStudentsFormView(FormView):
         generate_random_students.delay(total)
         messages.success(self.request, 'We are generating random students! Wait a moment and refresh this page.')
         return redirect('all-students')
+
+
+def handler404(request, exception):
+    return render(request, './errors/404_error_handler.html', status=404)
+
+
+def handler500(request):
+    return render(request, './errors/404_error_handler.html', status=500)

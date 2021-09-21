@@ -1,19 +1,16 @@
 from django.contrib import messages
 # from django.forms.models import model_to_dict
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
-
 
 from faker import Faker
 
 from .forms import GenerateStudentsForm, StudentForm
 from .models import Student
 from .tasks import generate_random_students
-
-fake = Faker()
 
 
 class MainPage(View):
@@ -28,42 +25,25 @@ class CreateStudentView(CreateView):
     def form_valid(self, form):
         Student.objects.create(**form.cleaned_data)
         return redirect('all-students')
-# def create_student(request):
-#     if request.method == 'POST':
-#         form = StudentForm(request.POST)
-#         if form.is_valid():
-#             student_obj = Student(**form.cleaned_data)
-#             student_obj.save()
-#             return redirect('all-students')
-#     else:
-#         form = StudentForm()
-#
-#     return render(request, 'students/create_student_form.html', {'form': form})
 
 
-def generate_students(request):
-    count = request.GET.get('count', '0')
-    if count.isnumeric() and 0 < int(count) <= 100:
-        result_dict = {}
-        for i in range(1, int(count) + 1):
-            student_obj = Student(first_name=fake.first_name(),
-                                  last_name=fake.last_name(),
-                                  age=fake.random_int(18, 26))
-            student_obj.save()
-            counter = student_obj.id
-            inside_dict = {'ID': student_obj.id,
-                           'First name': student_obj.first_name,
-                           'Last name': student_obj.last_name,
-                           'Age:': student_obj.age}
-            result_dict.update({counter: inside_dict})
-
-        return JsonResponse(result_dict)
-
-    elif count == '0':
-        return HttpResponse('<h1>Default value is 0</h1>'
-                            '<br>Enter positive number from 1 too 100')
-    else:
-        return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
+class GenerateStudentsView(View):
+    def get(self, request, *args, **kwargs):
+        fake = Faker()
+        count = self.request.GET.get('count', '0')
+        if count.isnumeric() and 0 < int(count) <= 100:
+            students_result = []
+            for i in range(1, int(count) + 1):
+                students_result.append(Student(first_name=fake.first_name(),
+                                               last_name=fake.last_name(),
+                                               age=fake.random_int(18, 26)))
+            Student.objects.bulk_create(students_result)
+            return redirect('all-students')
+        elif count == '0':
+            return HttpResponse('<h1>Default value is 0</h1>'
+                                '<br>Enter positive number from 1 too 100')
+        else:
+            return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
 
 
 class EditStudentView(UpdateView):
@@ -71,19 +51,6 @@ class EditStudentView(UpdateView):
     template_name = 'students/student_edit_form.html'
     form_class = StudentForm
     success_url = reverse_lazy('all-students')
-
-
-# def edit_student(request, student_id):
-#     if request.method == 'POST':
-#         form = StudentForm(request.POST)
-#         if form.is_valid():
-#             Student.objects.update_or_create(defaults=form.cleaned_data, id=student_id)
-#             return redirect('all-students')
-#     else:
-#         student = Student.objects.filter(id=student_id).first()
-#         form = StudentForm(model_to_dict(student))
-#
-#     return render(request, 'students/student_edit_form.html', {'form': form, 'student_id': student_id})
 
 
 class DeleteStudentView(DeleteView):
@@ -129,17 +96,3 @@ class GenerateStudentsFormView(FormView):
         generate_random_students.delay(total)
         messages.success(self.request, 'We are generating random students! Wait a moment and refresh this page.')
         return redirect('all-students')
-
-
-# def generate_students_from_from(request):
-#     if request.method == 'POST':
-#         form = GenerateStudentsForm(request.POST)
-#         if form.is_valid():
-#             total = form.cleaned_data.get('total')
-#             generate_random_students.delay(total)
-#             messages.success(request, 'We are generating random students! Wait a moment and refresh this page.')
-#             return redirect('all-students')
-#     else:
-#         form = GenerateStudentsForm()
-#
-#     return render(request, 'students/student_generator.html', {'form': form})

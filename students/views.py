@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, View
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 
 from faker import Faker
@@ -69,7 +69,7 @@ def generate_students(request):
 class EditStudentView(UpdateView):
     model = Student
     template_name = 'students/student_edit_form.html'
-    fields = ['first_name', 'last_name', 'age', 'phone_number']
+    form_class = StudentForm
     success_url = reverse_lazy('all-students')
 
 
@@ -120,15 +120,26 @@ class StudentsListView(ListView):
         return queryset
 
 
-def generate_students_from_from(request):
-    if request.method == 'POST':
-        form = GenerateStudentsForm(request.POST)
-        if form.is_valid():
-            total = form.cleaned_data.get('total')
-            generate_random_students.delay(total)
-            messages.success(request, 'We are generating random students! Wait a moment and refresh this page.')
-            return redirect('all-students')
-    else:
-        form = GenerateStudentsForm()
+class GenerateStudentsFormView(FormView):
+    template_name = 'students/student_generator.html'
+    form_class = GenerateStudentsForm
 
-    return render(request, 'students/student_generator.html', {'form': form})
+    def form_valid(self, form):
+        total = form.cleaned_data.get('total')
+        generate_random_students.delay(total)
+        messages.success(self.request, 'We are generating random students! Wait a moment and refresh this page.')
+        return redirect('all-students')
+
+
+# def generate_students_from_from(request):
+#     if request.method == 'POST':
+#         form = GenerateStudentsForm(request.POST)
+#         if form.is_valid():
+#             total = form.cleaned_data.get('total')
+#             generate_random_students.delay(total)
+#             messages.success(request, 'We are generating random students! Wait a moment and refresh this page.')
+#             return redirect('all-students')
+#     else:
+#         form = GenerateStudentsForm()
+#
+#     return render(request, 'students/student_generator.html', {'form': form})

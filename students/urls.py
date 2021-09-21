@@ -9,5 +9,5 @@ urlpatterns = [
     path('all-students/', views.StudentsListView.as_view(), name='all-students'),
     path('edit-student/<int:pk>/', views.EditStudentView.as_view(), name='edit-student'),
     path('delete-student/<int:pk>/', views.DeleteStudentView.as_view(), name='delete-student'),
-    path('generate-students-form/', views.generate_students_from_from, name='generate-students-form')
+    path('generate-students-form/', views.GenerateStudentsFormView.as_view(), name='generate-students-form')
 ]

@@ -12,7 +12,7 @@
         <th>Group curator</th>
         <th>Group monitor</th>
 
-        {% for group in groups %}
+        {% for group in group_list %}
             <tr>
                 <td>{{ group.id|safe }}</td>
                 <td>{{ group.group_name|safe }}</td>

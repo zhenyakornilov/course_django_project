@@ -1,39 +1,35 @@
 from django.forms.models import model_to_dict
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic import ListView
 
 from .forms import TeacherForm
 from .models import Teacher
 
 
-def create_teacher(request):
-    if request.method == 'POST':
-        form = TeacherForm(request.POST)
-        if form.is_valid():
-            Teacher.objects.create(**form.cleaned_data)
-            return redirect('all-teachers')
-    else:
-        form = TeacherForm()
+class CreateTeacherView(CreateView):
+    form_class = TeacherForm
+    template_name = 'teachers/create_teacher_form.html'
 
-    return render(request, 'teachers/create_teacher_form.html', {'form': form})
+    def form_valid(self, form):
+        Teacher.objects.create(**form.cleaned_data)
+        return redirect('all-teachers')
 
 
-def edit_teacher(request, teacher_id):
-    if request.method == 'POST':
-        form = TeacherForm(request.POST)
-        if form.is_valid():
-            Teacher.objects.update_or_create(defaults=form.cleaned_data, id=teacher_id)
-            return redirect('all-teachers')
-    else:
-        teacher = Teacher.objects.filter(id=teacher_id).first()
-        form = TeacherForm(model_to_dict(teacher))
-
-    return render(request, 'teachers/teacher_edit_form.html', {'form': form, 'teacher_id': teacher_id})
+class EditTeacherView(UpdateView):
+    model = Teacher
+    template_name = 'teachers/teacher_edit_form.html'
+    form_class = TeacherForm
+    success_url = reverse_lazy('all-teachers')
 
 
-def delete_teacher(request, teacher_id):
-    Teacher.objects.filter(id=teacher_id).delete()
-    return redirect('all-teachers')
+class DeleteTeacherView(DeleteView):
+    model = Teacher
+    success_url = reverse_lazy('all-teachers')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
 class TeachersListView(ListView):

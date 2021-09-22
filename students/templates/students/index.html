@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2><a href="/admin">Admin</a></h2>
-    <h2><a href="{% url 'create-student' %}">Create student</a></h2>
-    <h2><a href="{% url 'all-students' %}">Show all students</a></h2>
-    <h2><a href="{% url 'create-teacher' %}">Create teacher</a></h2>
-    <h2><a href="{% url 'all-teachers' %}">Show all teachers</a></h2>
-    <h2><a href="{% url 'contact-us' %}">Contact Us</a></h2>
+    <h2><a href="/admin" style="color: black">Admin</a></h2>
+    <h2><a href="{% url 'create-student' %}" style="color: black">Create student</a></h2>
+    <h2><a href="{% url 'all-students' %}" style="color: black">Show all students</a></h2>
+    <h2><a href="{% url 'create-teacher' %}" style="color: black">Create teacher</a></h2>
+    <h2><a href="{% url 'all-teachers' %}" style="color: black">Show all teachers</a></h2>
+    <h2><a href="{% url 'all-groups' %}" style="color: black">Show all groups</a></h2>
+    <h2><a href="{% url 'contact-us' %}" style="color: black">Contact Us</a></h2>
+    <h2><a href="{% url 'currency-list' %}" style="color: black">Currency list</a></h2>
 {% endblock %}
 

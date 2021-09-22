@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ block.super }}
+    <title>Currency list</title>
+
+{% endblock %}
+{% block content %}
+    <table>
+        <th>Creation date</th>
+        <th>Currency</th>
+        <th>Source</th>
+        <th>Buy price</th>
+        <th>Sell price</th>
+        {% for currency in currency_list %}
+            <tr>
+                <td>{{ currency.created_at|date:'d.m.Y - H:m:s'}}</td>
+                <td>{{ currency.currency|safe }}</td>
+                <td>{{ currency.source|safe }}</td>
+                <td>{{ currency.price_for_buy|safe }}</td>
+                <td>{{ currency.price_for_sell|safe }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -2,10 +2,13 @@ from django.db import models
 
 
 class Student(models.Model):
-    first_name = models.CharField('First_name', max_length=200)
-    last_name = models.CharField('Last_name', max_length=200)
-    age = models.IntegerField('Age')
-    phone_number = models.CharField(null=True, blank=True, unique=True, max_length=12)
+    first_name = models.CharField('First_name', max_length=200, db_column='First name')
+    last_name = models.CharField('Last_name', max_length=200, db_column='Last name')
+    age = models.IntegerField('Age', db_column='Age')
+    phone_number = models.CharField(null=True, blank=True, unique=True, max_length=12, db_column='Phone number')
+
+    in_group = models.ForeignKey("group.Group", null=True, on_delete=models.CASCADE,
+                                 db_column="Group ID", verbose_name='Group ID')
 
     def __str__(self):
         return f'First name: {self.first_name}, ' \

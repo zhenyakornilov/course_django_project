@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
-    {{ block.super }}
     <title>All Groups</title>
+    {{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
         <th>Group curator</th>
         <th>Group monitor</th>
 
-        {% for group in groups %}
+        {% for group in group_list %}
             <tr>
                 <td>{{ group.id|safe }}</td>
                 <td>{{ group.group_name|safe }}</td>

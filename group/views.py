@@ -1,33 +1,33 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView
 
 from . forms import GroupForm
 from .models import Group
 
 
-def create_group(request):
-    if request.method == 'POST':
-        form = GroupForm(request.POST)
+class CreateGroupView(CreateView):
+    form_class = GroupForm
+    template_name = 'group/create_group.html'
 
-        if form.is_valid():
-            Group.objects.create(**form.cleaned_data)
-            return HttpResponse('Group created!')
-
-    elif request.method == 'GET':
-        form = GroupForm()
-
-    return render(request, 'group/create_group.html', {'form': form})
+    def form_valid(self, form):
+        Group.objects.create(**form.cleaned_data)
+        return redirect('all-groups')
 
 
-def show_all_groups(request):
-    filter_params = {}
-    group_id = request.GET.get('id', '')
-    if group_id:
-        filter_params['id'] = group_id
+class GroupListView(ListView):
+    model = Group
+    template_name = 'group/group_list.html'
 
-    group_name = request.GET.get('group_name', '')
-    if group_name:
-        filter_params['group_name'] = group_name
+    def get_queryset(self):
+        filter_params = {}
+        group_id = self.request.GET.get('id', '')
+        if group_id:
+            filter_params['id'] = group_id
 
-    group_list = Group.objects.filter(**filter_params)
-    return render(request, 'group/group_list.html', {'groups': group_list})
+        group_name = self.request.GET.get('group_name', '')
+        if group_name:
+            filter_params['group_name'] = group_name
+
+        queryset = Group.objects.filter(**filter_params)
+        return queryset

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block head %}
+    <title>Page not found</title>
+    {{ block.super }}
+{% endblock %}
+{% block content %}
+    <h2>You are lost</h2>
+    <p>Here is link to return to main page</p>
+
+    <ul>
+        <li>
+            <a href="{% url 'main-page' %}" style="color: darkslateblue">Go to main page</a>
+        </li>
+    </ul>
+{% endblock %}

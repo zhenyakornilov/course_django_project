@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
-    {{ block.super }}
     <title>All Teachers</title>
+    {{ block.super }}
     <style type="text/css">
         body {
             background-color: darksalmon;
@@ -15,8 +15,8 @@
         }
 
     </style>
-
 {% endblock %}
+
 {% block content %}
     <table>
         <th>ID</th>
@@ -26,7 +26,7 @@
         <th>Age</th>
         <th>Edit data</th>
         <th>Delete from base</th>
-        {% for teacher in teachers %}
+        {% for teacher in teacher_list %}
             <tr>
                 <td>{{ teacher.id|safe }}</td>
                 <td>{{ teacher.subject }}</td>

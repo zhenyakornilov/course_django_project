@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
@@ -144,7 +144,6 @@ CELERY_BROKER_URL = 'pyamqp://guest@localhost//'
 CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_TASK_TRACK_STARTED = True
 
-
 # Celery scheduler
 CELERY_BEAT_SCHEDULE = {
     'beat_delete_logs': {
@@ -158,7 +157,7 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Sending e-mail settings
-ADMINS_EMAIL = ['zhenyakornilov98@gmail.com', 'vitalik1996@gmail.com']
+ADMINS_EMAIL = os.getenv('ADMINS_EMAIL')
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

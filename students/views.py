@@ -1,8 +1,10 @@
 from django.contrib import messages
-from django.forms.models import model_to_dict
-from django.http import HttpResponse, JsonResponse
+# from django.forms.models import model_to_dict
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
-
+from django.urls import reverse_lazy
+from django.views.generic import ListView, View
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 
 from faker import Faker
 
@@ -10,124 +12,95 @@ from .forms import GenerateStudentsForm, StudentForm
 from .models import Student
 from .tasks import generate_random_students
 
-fake = Faker()
+
+class MainPage(View):
+    def get(self, request):
+        return render(request, 'students/index.html')
 
 
-def main_page(request):
-    return render(request, 'students/index.html')
+class CreateStudentView(CreateView):
+    form_class = StudentForm
+    template_name = 'students/create_student_form.html'
+
+    def form_valid(self, form):
+        Student.objects.create(**form.cleaned_data)
+        return redirect('all-students')
 
 
-def create_student(request):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            student_obj = Student(**form.cleaned_data)
-            student_obj.save()
+class GenerateStudentsView(View):
+    def get(self, request, *args, **kwargs):
+        fake = Faker()
+        count = self.request.GET.get('count', '0')
+        if count.isnumeric() and 0 < int(count) <= 100:
+            students_result = []
+            for i in range(1, int(count) + 1):
+                students_result.append(Student(first_name=fake.first_name(),
+                                               last_name=fake.last_name(),
+                                               age=fake.random_int(18, 26)))
+            Student.objects.bulk_create(students_result)
             return redirect('all-students')
-    else:
-        form = StudentForm()
-
-    return render(request, 'students/create_student_form.html', {'form': form})
-
-    # previous version of function 'generate_student'
-    # student = Student.objects.create(first_name=fake.first_name(),
-    #                                  last_name=fake.last_name(),
-    #                                  age=fake.random_int(18, 26))
-    # result_dict = {student.id: {'ID': student.id,
-    #                             'First name': student.first_name,
-    #                             'Last name': student.last_name,
-    #                             'Age': student.age}}
-    #
-    # return JsonResponse(result_dict)
+        elif count == '0':
+            return HttpResponse('<h1>Default value is 0</h1>'
+                                '<br>Enter positive number from 1 too 100')
+        else:
+            return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
 
 
-def generate_students(request):
-    count = request.GET.get('count', '0')
-    if count.isnumeric() and 0 < int(count) <= 100:
-        result_dict = {}
-        for i in range(1, int(count) + 1):
-            student_obj = Student(first_name=fake.first_name(),
-                                  last_name=fake.last_name(),
-                                  age=fake.random_int(18, 26))
-            student_obj.save()
-            counter = student_obj.id
-            inside_dict = {'ID': student_obj.id,
-                           'First name': student_obj.first_name,
-                           'Last name': student_obj.last_name,
-                           'Age:': student_obj.age}
-            result_dict.update({counter: inside_dict})
-
-        return JsonResponse(result_dict)
-
-    elif count == '0':
-        return HttpResponse('<h1>Default value is 0</h1>'
-                            '<br>Enter positive number from 1 too 100')
-    else:
-        return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
+class EditStudentView(UpdateView):
+    model = Student
+    template_name = 'students/student_edit_form.html'
+    form_class = StudentForm
+    success_url = reverse_lazy('all-students')
 
 
-def edit_student(request, student_id):
-    if request.method == 'POST':
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            Student.objects.update_or_create(defaults=form.cleaned_data, id=student_id)
-            return redirect('all-students')
-    else:
-        student = Student.objects.filter(id=student_id).first()
-        form = StudentForm(model_to_dict(student))
+class DeleteStudentView(DeleteView):
+    model = Student
+    success_url = reverse_lazy('all-students')
 
-    return render(request, 'students/student_edit_form.html', {'form': form, 'student_id': student_id})
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 
-def delete_student(request, student_id):
-    Student.objects.filter(id=student_id).delete()
-    return redirect('all-students')
+class StudentsListView(ListView):
+    model = Student
+    template_name = 'students/students_list.html'
+
+    def get_queryset(self):
+        filter_params = {}
+        student_id = self.request.GET.get('id', '')
+        if student_id:
+            filter_params['id'] = student_id
+
+        student_first_name = self.request.GET.get('first_name', '')
+        if student_first_name:
+            filter_params['first_name'] = student_first_name
+
+        student_last_name = self.request.GET.get('last_name', '')
+        if student_last_name:
+            filter_params['last_name'] = student_last_name
+
+        student_age = self.request.GET.get('age', '')
+        if student_age:
+            filter_params['age'] = student_age
+
+        queryset = Student.objects.filter(**filter_params)
+        return queryset
 
 
-def show_all_students(request):
-    filter_params = {}
-    student_id = request.GET.get('id', '')
-    if student_id:
-        filter_params['id'] = student_id
+class GenerateStudentsFormView(FormView):
+    template_name = 'students/student_generator.html'
+    form_class = GenerateStudentsForm
 
-    student_first_name = request.GET.get('first_name', '')
-    if student_first_name:
-        filter_params['first_name'] = student_first_name
-
-    student_last_name = request.GET.get('last_name', '')
-    if student_last_name:
-        filter_params['last_name'] = student_last_name
-
-    student_age = request.GET.get('age', '')
-    if student_age:
-        filter_params['age'] = student_age
-
-    students_list = Student.objects.filter(**filter_params)
-    return render(request, 'students/students_list.html', {'students': students_list})
-
-    # previous version of function
-    # students = Student.objects.all()
-    # result_dict = {}
-    # for student in students:
-    #     counter = student.id
-    #     inside_dict = {'ID': student.id,
-    #                    'First name': student.first_name,
-    #                    'Last name': student.last_name,
-    #                    'Age': student.age}
-    #     result_dict.update({counter: inside_dict})
-    #
-    # return JsonResponse(result_dict)
+    def form_valid(self, form):
+        total = form.cleaned_data.get('total')
+        generate_random_students.delay(total)
+        messages.success(self.request, 'We are generating random students! Wait a moment and refresh this page.')
+        return redirect('all-students')
 
 
-def generate_students_from_from(request):
-    if request.method == 'POST':
-        form = GenerateStudentsForm(request.POST)
-        if form.is_valid():
-            total = form.cleaned_data.get('total')
-            generate_random_students.delay(total)
-            messages.success(request, 'We are generating random students! Wait a moment and refresh this page.')
-            return redirect('all-students')
-    else:
-        form = GenerateStudentsForm()
+def handler404(request, exception):
+    return render(request, './errors/404_error_handler.html', status=404)
 
-    return render(request, 'students/student_generator.html', {'form': form})
+
+def handler500(request):
+    return render(request, './errors/404_error_handler.html', status=500)

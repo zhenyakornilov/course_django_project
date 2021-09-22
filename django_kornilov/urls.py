@@ -18,6 +18,7 @@ import debug_toolbar
 from django.contrib import admin
 from django.urls import include, path
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('project-debug/', include(debug_toolbar.urls)),
@@ -27,3 +28,5 @@ urlpatterns = [
     path('', include('mail_processing.urls')),
     path('', include('currency.urls')),
 ]
+handler404 = 'students.views.handler404'
+handler500 = 'students.views.handler500'

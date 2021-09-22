@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <body>
-
-    <h2>Group creation form</h2>
-
+{% extends "base.html" %}
+{% block head %}
+    <title>Create group</title>
+    {{ block.super }}
+{% endblock %}
+{% block content %}
+    <h1>Group creation form</h1>
     <form action="/create-group/" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Submit">
     </form>
+{% endblock %}
 
-    </body>
-</html>

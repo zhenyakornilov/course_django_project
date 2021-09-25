@@ -30,3 +30,8 @@ urlpatterns = [
 ]
 handler404 = 'students.views.handler404'
 handler500 = 'students.views.handler500'
+
+
+admin.site.index_title = "Django Kornilov"
+admin.site.site_header = "Django Kornilov Admin"
+admin.site.site_title = 'Admin panel'

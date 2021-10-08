@@ -1,6 +1,6 @@
 import pytest
 
-from pytest_django.asserts import assertTemplateUsed, assertFormError
+from pytest_django.asserts import assertTemplateUsed
 
 from students.forms import StudentForm
 from students.models import Student
@@ -21,8 +21,9 @@ def test_students_views(path, client, create_student):
                                            'age': 24, 'phone_number': '380000000000'},
                                follow=True)
         redirect_url = response.redirect_chain[0][0]
-        print(redirect_url)
+        print(redirect_url)  # noqa: T001
         redirect_status_code = response.redirect_chain[0][1]
+        print(redirect_status_code)  # noqa: T001
 
         assert redirect_url == '/all-students/'
         assert redirect_status_code == 302
@@ -36,30 +37,6 @@ def test_students_views(path, client, create_student):
         assert student.first_name in response.content.decode()
         assertTemplateUsed(response, 'students/students_list.html')
     assert Student.objects.count() == 1
-
-
-@pytest.mark.django_db
-def test_edit_student_view(request, client, create_student):
-    response_get = client.get('/edit-student/1/')
-    # assertTemplateUsed(response_get, 'students/student-edit-form.html')
-    # invalid_data = {'first_name': 'test', 'last_name': 'test',
-    #                 'age': 24, 'phone_number': 'bad_number'}
-    # expected_error = f"{invalid_data.get('phone_number')}: Enter phone number in 380xxxxxxxxx format"
-    # form = StudentForm()
-    # response = client.post('/edit-student/1/', data=invalid_data)
-    # assertFormError(response, form, 'phone_number', expected_error)
-
-
-@pytest.mark.django_db
-def test_edit_student(client, create_student):
-    response = client.get('/edit-student/1/')
-    assert response.status_code == 200
-    # assertTemplateUsed(response, 'students/student_edit_form.html')
-    # form = StudentForm()
-    # invalid_data = {'first_name': 'test', 'last_name': 'test', 'age': 24, 'phone_number': 'bad_number'}
-    # expected_error = f'{invalid_data.get("phone_number")}: Enter phone number in 380xxxxxxxxx format'
-    # response_edit = client.post('/edit-student/1/', data=invalid_data)
-    # assertFormError(response, form, 'phone_number', expected_error)
 
 
 @pytest.mark.django_db

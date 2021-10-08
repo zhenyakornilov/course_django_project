@@ -14,9 +14,14 @@ class TestStudentModelRelatedViews:
         assert response.status_code == 200
         assertTemplateUsed(response, 'students/create_student_form.html')
         response = client.post('/create-student/', data={'first_name': 'test', 'last_name': 'test',
-                                                         'age': 24, 'phone_number': '380000000000'})
-        assert response.status_code == 302
-        assert Student.objects.count() == 2
+                                                         'age': 24, 'phone_number': '380000000000'},
+                               follow=True)
+        assert response.status_code == 200
+        redirect_url = response.redirect_chain[0][0]
+        redirect_status_code = response.redirect_chain[0][1]
+
+        assert redirect_url == '/all-students/'
+        assert redirect_status_code == 302
 
     def test_all_students_view(self, client, create_student):
         response = client.get('/all-students/')
@@ -43,8 +48,14 @@ class TestStudentModelRelatedViews:
 
     def test_delete_student_view(self, client, create_student):
         student = Student.objects.get(pk=1)
-        response = client.post(f'/delete-student/{student.pk}/')
-        assert response.status_code == 302
+        response = client.get(f'/delete-student/{student.pk}/', follow=True)
+
+        assert response.status_code == 200
+        redirect_url = response.redirect_chain[0][0]
+        redirect_status_code = response.redirect_chain[0][1]
+
+        assert redirect_url == '/all-students/'
+        assert redirect_status_code == 302
 
 
 @pytest.mark.django_db

@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
+
 import pytest
 
 from pytest_django.asserts import assertTemplateUsed
-from pytz import timezone
 
 from students.models import Logger, Student
 from students.tasks import delete_logs, generate_random_students
@@ -106,8 +106,7 @@ def test_custom_error_404(client):
 @pytest.mark.django_db
 def test_handler_capitalize_student_fullname(client, create_student):
     student = Student.objects.get(pk=1)
-    response = client.post(f'/edit-student/{student.pk}/',
-                           data={'first_name': 'mad', 'last_name': 'max', 'age': 22})
+    client.post(f'/edit-student/{student.pk}/', data={'first_name': 'mad', 'last_name': 'max', 'age': 22})
 
     assert Student.objects.get(pk=1).first_name == 'Mad'
     assert Student.objects.get(pk=1).last_name == 'Max'
@@ -116,12 +115,10 @@ def test_handler_capitalize_student_fullname(client, create_student):
 @pytest.mark.django_db
 def test_delete_logs(admin_client):
     assert Logger.objects.count() == 0
-    response = admin_client.get('/admin/')
+    admin_client.get('/admin/')
     assert Logger.objects.count() == 1
     log = Logger.objects.filter(
         created__lte=datetime.now() - timedelta(days=7)
     )
     assert log.count() == 0
     delete_logs()
-
-

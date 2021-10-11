@@ -1,8 +1,8 @@
 import pytest
 
-from teachers.models import Teacher
-
 from pytest_django.asserts import assertTemplateUsed
+
+from teachers.models import Teacher
 
 
 @pytest.mark.django_db

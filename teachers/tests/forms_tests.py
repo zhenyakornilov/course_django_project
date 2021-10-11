@@ -18,4 +18,3 @@ class TestStudentForm:
         form = TeacherForm(data={})
         assert not form.is_valid()
         assert len(form.errors) == 4
-

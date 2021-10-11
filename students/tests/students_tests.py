@@ -113,12 +113,19 @@ def test_handler_capitalize_student_fullname(client, create_student):
 
 
 @pytest.mark.django_db
-def test_delete_logs(admin_client):
-    assert Logger.objects.count() == 0
-    admin_client.get('/admin/')
+def test_delete_logs(admin_client, create_log):
     assert Logger.objects.count() == 1
-    log = Logger.objects.filter(
+
+    admin_client.get('/admin/')
+    assert Logger.objects.count() == 2
+
+    test_datetime = datetime(2012, 12, 12)
+    Logger.objects.filter(pk=1).update(created=test_datetime)
+
+    assert Logger.objects.filter(
         created__lte=datetime.now() - timedelta(days=7)
-    )
-    assert log.count() == 0
-    delete_logs()
+    ).count() == 1
+    assert delete_logs() == 'Logs deleted!'
+    assert Logger.objects.count() == 1
+    assert Logger.objects.filter(pk=2).exists()
+    assert not Logger.objects.filter(pk=1).exists()

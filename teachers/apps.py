@@ -6,4 +6,4 @@ class TeachersConfig(AppConfig):
     name = 'teachers'
 
     def ready(self):
-        from .handlers import capitalize_student_fullname  # noqa: F401
+        from .handlers import capitalize_teacher_fullname  # noqa: F401

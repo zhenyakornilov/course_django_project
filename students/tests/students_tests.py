@@ -15,25 +15,24 @@ class TestStudentModelRelatedViews:
         response = client.get('/create-student/')
         assert response.status_code == 200
         assertTemplateUsed(response, 'students/create_student_form.html')
+
         response = client.post('/create-student/', data={'first_name': 'Name', 'last_name': 'Surname',
                                                          'age': 24, 'phone_number': '380000000000'},
                                follow=True)
+        assert response.status_code == 200
         assert Student.objects.count() == 2
         assert Student.objects.get(pk=2).first_name == 'Name'
         assert Student.objects.get(pk=2).last_name == 'Surname'
 
-        assert response.status_code == 200
         redirect_url = response.redirect_chain[0][0]
         redirect_status_code = response.redirect_chain[0][1]
-
         assert redirect_url == '/all-students/'
         assert redirect_status_code == 302
 
     def test_all_students_view(self, client, create_student):
         response = client.get('/all-students/')
         assert response.status_code == 200
-        student = Student.objects.get(pk=1)
-        assert student.first_name in response.content.decode()
+        assert Student.objects.get(pk=1).first_name in response.content.decode()
         assertTemplateUsed(response, 'students/students_list.html')
 
     def test_edit_student_view(self, client, create_student):
@@ -41,26 +40,26 @@ class TestStudentModelRelatedViews:
         response = client.get(f'/edit-student/{student.pk}/')
         assert response.status_code == 200
         assertTemplateUsed(response, 'students/student_edit_form.html')
+
         response = client.post(f'/edit-student/{student.pk}/',
                                data={'first_name': 'Name', 'last_name': 'Surname',
                                      'age': 24, 'phone_number': '380000000000'},
                                follow=True)
         assert response.status_code == 200
         assert Student.objects.get(pk=1).first_name == 'Name'
+
         redirect_url = response.redirect_chain[0][0]
         redirect_status_code = response.redirect_chain[0][1]
-
         assert redirect_url == '/all-students/'
         assert redirect_status_code == 302
 
     def test_delete_student_view(self, client, create_student):
         student = Student.objects.get(pk=1)
-        response = client.get(f'/delete-student/{student.pk}/', follow=True)
-
+        response = client.post(f'/delete-student/{student.pk}/', follow=True)
         assert response.status_code == 200
+
         redirect_url = response.redirect_chain[0][0]
         redirect_status_code = response.redirect_chain[0][1]
-
         assert redirect_url == '/all-students/'
         assert redirect_status_code == 302
 
@@ -76,6 +75,7 @@ def test_generate_students_view_get(client):
     response = client.get('/generate-students/', {'count': 0})
     assert '<h1>Default value is 0</h1>'\
            '<br>Enter positive number from 1 too 100' == response.content.decode()
+
     response = client.get('/generate-students/', {'count': 100}, follow=True)
     assert Student.objects.count() == 100
     assert response.status_code == 200
@@ -106,8 +106,8 @@ def test_custom_error_404(client):
 @pytest.mark.django_db
 def test_handler_capitalize_student_fullname(client, create_student):
     student = Student.objects.get(pk=1)
-    client.post(f'/edit-student/{student.pk}/', data={'first_name': 'mad', 'last_name': 'max', 'age': 22})
-
+    client.post(f'/edit-student/{student.pk}/',
+                data={'first_name': 'mad', 'last_name': 'max', 'age': 22})
     assert Student.objects.get(pk=1).first_name == 'Mad'
     assert Student.objects.get(pk=1).last_name == 'Max'
 
@@ -115,7 +115,6 @@ def test_handler_capitalize_student_fullname(client, create_student):
 @pytest.mark.django_db
 def test_delete_logs(admin_client, create_log):
     assert Logger.objects.count() == 1
-
     admin_client.get('/admin/')
     assert Logger.objects.count() == 2
 

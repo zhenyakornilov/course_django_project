@@ -147,7 +147,7 @@ INTERNAL_IPS = [
 CELERY_BROKER_URL = "pyamqp://guest@localhost//"
 CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_TASK_TRACK_STARTED = True
-
+TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'
 # Celery scheduler
 CELERY_BEAT_SCHEDULE = {
     "beat_delete_logs": {

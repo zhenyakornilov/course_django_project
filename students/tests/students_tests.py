@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from django.test import override_settings
+
 import pytest
 
 from pytest_django.asserts import assertTemplateUsed
@@ -86,9 +88,11 @@ def test_generate_students_view_get(client):
     assert redirect_status_code == 302
 
 
+@override_settings(CELERY_TASK_ALWAYS_EAGER=True)
 @pytest.mark.django_db
 def test_generate_random_students(create_student):
-    assert generate_random_students(3) == '3 random students created with success!'
+    task = generate_random_students.delay(3)
+    assert task.successful()
     assert Student.objects.count() == 4
 
 
@@ -112,6 +116,7 @@ def test_handler_capitalize_student_fullname(client, create_student):
     assert Student.objects.get(pk=1).last_name == 'Max'
 
 
+@override_settings(CELERY_TASK_ALWAYS_EAGER=True)
 @pytest.mark.django_db
 def test_delete_logs(admin_client, create_log):
     assert Logger.objects.count() == 1
@@ -124,7 +129,8 @@ def test_delete_logs(admin_client, create_log):
     assert Logger.objects.filter(
         created__lte=datetime.now() - timedelta(days=7)
     ).count() == 1
-    assert delete_logs() == 'Logs deleted!'
+    task = delete_logs.delay()
+    assert task.successful()
     assert Logger.objects.count() == 1
     assert Logger.objects.filter(pk=2).exists()
     assert not Logger.objects.filter(pk=1).exists()

@@ -161,7 +161,7 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Sending e-mail settings
-ADMINS_EMAIL = os.getenv("ADMINS_EMAIL")
+ADMINS_EMAIL = [os.getenv("ADMINS_EMAIL"),]
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

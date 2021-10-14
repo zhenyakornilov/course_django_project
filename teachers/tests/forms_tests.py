@@ -1,14 +1,11 @@
-import pytest
-
 from teachers.forms import TeacherForm
 
 
-class TestStudentForm:
+class TestTeacherForm:
     def test_form_is_invalid(self):
         form = TeacherForm(data={'first_name': 'test', 'last_name': 'test', 'age': 24})
         assert not form.is_valid()
 
-    @pytest.mark.django_db
     def test_form_is_valid(self):
         form = TeacherForm(data={'subject': 'Math', 'first_name': 'test',
                                  'last_name': 'test', 'age': 24})

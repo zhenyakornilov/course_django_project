@@ -10,5 +10,8 @@ class Group(models.Model):
     group_monitor = models.OneToOneField("students.Student", null=True,
                                          on_delete=models.CASCADE, db_column='Group monitor ID')
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return f'{self.group_name}, {self.students_in_group}'

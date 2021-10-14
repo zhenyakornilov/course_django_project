@@ -11,6 +11,7 @@ from pytest_django.asserts import assertTemplateUsed
 @pytest.mark.django_db
 def test_currency_rates(client):
     task = get_currency_rates.delay()
+    assert task.result == 'Currencies saved'
     assert task.successful()
     response = client.get('/currency/')
     assert response.status_code == 200

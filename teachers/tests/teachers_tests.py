@@ -34,11 +34,11 @@ class TestStudentModelRelatedViews:
 
     def test_edit_teacher_view(self, client, create_teacher):
         teacher = Teacher.objects.get(pk=1)
-        response = client.get(f'/edit-teacher/{teacher.pk}')
+        response = client.get(f'/edit-teacher/{teacher.pk}/')
         assert response.status_code == 200
         assertTemplateUsed(response, 'teachers/teacher_edit_form.html')
 
-        response = client.post(f'/edit-teacher/{teacher.pk}',
+        response = client.post(f'/edit-teacher/{teacher.pk}/',
                                data={'subject': 'Math', 'first_name': 'Name', 'last_name': 'Surname', 'age': 24},
                                follow=True)
         assert response.status_code == 200
@@ -51,7 +51,7 @@ class TestStudentModelRelatedViews:
 
     def test_delete_teacher_view(self, client, create_teacher):
         teacher = Teacher.objects.get(pk=1)
-        response = client.post(f'/delete-teacher/{teacher.pk}', follow=True)
+        response = client.post(f'/delete-teacher/{teacher.pk}/', follow=True)
         assert response.status_code == 200
 
         redirect_url = response.redirect_chain[0][0]
@@ -63,7 +63,7 @@ class TestStudentModelRelatedViews:
 @pytest.mark.django_db
 def test_handler_capitalize_teacher_fullname(client, create_teacher):
     teacher = Teacher.objects.get(pk=1)
-    client.post(f'/edit-teacher/{teacher.pk}',
+    client.post(f'/edit-teacher/{teacher.pk}/',
                 data={'subject': 'Math', 'first_name': 'good', 'last_name': 'teacher', 'age': 22})
     assert Teacher.objects.get(pk=1).first_name == 'Good'
     assert Teacher.objects.get(pk=1).last_name == 'Teacher'

@@ -92,6 +92,7 @@ def test_generate_students_view_get(client):
 @pytest.mark.django_db
 def test_generate_random_students(create_student):
     task = generate_random_students.delay(3)
+    assert task.result == '3 random students created with success!'
     assert task.successful()
     assert Student.objects.count() == 4
 
@@ -130,6 +131,7 @@ def test_delete_logs(admin_client, create_log):
         created__lte=datetime.now() - timedelta(days=7)
     ).count() == 1
     task = delete_logs.delay()
+    assert task.result == 'Logs deleted!'
     assert task.successful()
     assert Logger.objects.count() == 1
     assert Logger.objects.filter(pk=2).exists()

@@ -1,10 +1,8 @@
 from django.test import override_settings
 
-from pytest_django.asserts import assertTemplateUsed
-
 from mail_processing.tasks import proceed_contact_us_form
 
-from django_kornilov.settings import ADMINS_EMAIL, EMAIL_HOST_USER
+from pytest_django.asserts import assertTemplateUsed
 
 
 class TestShowContactFormView:
@@ -26,5 +24,3 @@ class TestShowContactFormView:
                                              email_from=test_data.get('email_from'))
         assert task.result == 'An e-mail has been sent!'
         assert task.successful()
-
-

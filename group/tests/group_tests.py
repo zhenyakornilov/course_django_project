@@ -1,8 +1,8 @@
+from group.models import Group
+
 import pytest
 
 from pytest_django.asserts import assertTemplateUsed
-
-from group.models import Group
 
 
 @pytest.mark.django_db

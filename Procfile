@@ -1,1 +1,1 @@
-web: waitress-serve django_kornilov.wsgi:application
+web: waitress-serve --port=$PORT django_kornilov.django_kornilov.wsgi:application

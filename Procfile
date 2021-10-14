@@ -1,2 +1,3 @@
 web: gunicorn django_kornilov.wsgi --log-file -
-celery: celery worker -A django_kornilov -l INFO -concurrency 4 -P solo
+worker: celery -A django_kornilov worker --beat --concurrency 5 -l info
+# beat: celery -A django_kornilov beat

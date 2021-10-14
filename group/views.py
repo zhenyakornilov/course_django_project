@@ -18,6 +18,7 @@ class CreateGroupView(CreateView):
 class GroupListView(ListView):
     model = Group
     template_name = 'group/group_list.html'
+    paginate_by = 20
 
     def get_queryset(self):
         filter_params = {}

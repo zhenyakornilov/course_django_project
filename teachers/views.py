@@ -35,6 +35,7 @@ class DeleteTeacherView(DeleteView):
 class TeachersListView(ListView):
     model = Teacher
     template_name = 'teachers/teachers_list.html'
+    paginate_by = 20
 
     def get_queryset(self):
         filter_params = {}

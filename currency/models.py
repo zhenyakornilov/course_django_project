@@ -16,6 +16,7 @@ class Currency(models.Model):
 
     class Meta:
         verbose_name_plural = 'Currencies'
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"{self.created_at}::{self.currency}, {self.source}; " \

@@ -162,5 +162,5 @@ cython_debug/
 # celery
 celerybeat-schedule.*
 
-static/
+.static/
 

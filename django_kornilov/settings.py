@@ -153,7 +153,7 @@ INTERNAL_IPS = [
 
 # Celery settings
 # previous celery broker settings: "pyamqp://guest@localhost//"
-CELERY_BROKER_URL = "amqps://nttdgwan:uh75FxJo8z-s8QcuMVTcJ1IyhVAesEP_@baboon.rmq.cloudamqp.com/nttdgwan"
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_TASK_TRACK_STARTED = True
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'

@@ -152,7 +152,7 @@ INTERNAL_IPS = [
 
 # Celery settings
 # previous celery broker settings: "pyamqp://guest@localhost//"
-CELERY_BROKER_URL = os.getenv('CLOUDAMQP_APIKEY', "pyamqp://guest@localhost//")
+CELERY_BROKER_URL = os.getenv('CLOUDAMQP_URL', "pyamqp://guest@localhost//")
 CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_TASK_TRACK_STARTED = True
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'

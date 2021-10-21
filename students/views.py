@@ -1,5 +1,4 @@
 from django.contrib import messages
-# from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -64,6 +63,7 @@ class DeleteStudentView(DeleteView):
 class StudentsListView(ListView):
     model = Student
     template_name = 'students/students_list.html'
+    paginate_by = 20
 
     def get_queryset(self):
         filter_params = {}

@@ -10,6 +10,9 @@ class Student(models.Model):
     in_group = models.ForeignKey("group.Group", null=True, on_delete=models.CASCADE,
                                  db_column="Group ID", verbose_name='Group ID')
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self):
         return f'First name: {self.first_name}, ' \
                f'Last name: {self.last_name}, ' \

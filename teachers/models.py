@@ -7,6 +7,9 @@ class Teacher(models.Model):
     last_name = models.CharField('Last name', max_length=200, db_column='Last name')
     age = models.IntegerField('Age', db_column='Age')
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return f'ID: {self.id}, '\
                f'Subject: {self.subject}, ' \

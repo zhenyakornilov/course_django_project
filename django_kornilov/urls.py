@@ -20,13 +20,18 @@ from django.urls import include, path
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('project-debug/', include(debug_toolbar.urls)),
-    path('', include('students.urls')),
-    path('', include('group.urls')),
-    path('', include('teachers.urls')),
-    path('', include('mail_processing.urls')),
-    path('', include('currency.urls')),
+    path("admin/", admin.site.urls),
+    path("project-debug/", include(debug_toolbar.urls)),
+    path("", include("students.urls")),
+    path("", include("group.urls")),
+    path("", include("teachers.urls")),
+    path("", include("mail_processing.urls")),
+    path("", include("currency.urls")),
 ]
-handler404 = 'students.views.handler404'
-handler500 = 'students.views.handler500'
+handler404 = "students.views.handler404"
+handler500 = "students.views.handler500"
+
+
+admin.site.index_title = "Django Kornilov"
+admin.site.site_header = "Django Kornilov Admin"
+admin.site.site_title = "Admin panel"

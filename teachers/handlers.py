@@ -5,7 +5,7 @@ from .models import Teacher
 
 
 @receiver(pre_save, sender=Teacher)
-def capitalize_student_fullname(sender, **kwargs):
+def capitalize_teacher_fullname(sender, **kwargs):
     if first_name := kwargs['instance'].first_name:
         kwargs['instance'].first_name = first_name.capitalize()
     if last_name := kwargs['instance'].last_name:

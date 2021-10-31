@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect, render
@@ -75,9 +76,15 @@ class ActivateAccount(View):
             return redirect('main-page')
 
 
-class AuthenticateView(LoginView):
-    template_name = "user_signup/signup.html"
+class AuthenticateView(SuccessMessageMixin, LoginView):
+    template_name = "user_signup/login.html"
+    success_message = 'You were successfully logged in'
 
     def form_invalid(self, form):
         messages.error(self.request, 'Wrong username or password')
         return super().form_invalid(form)
+
+
+class LoginFormView(SuccessMessageMixin, LogoutView):
+    next_page = 'main-page'
+    success_message = 'You have just logged out'

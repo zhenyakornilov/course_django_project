@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -85,6 +86,17 @@ class AuthenticateView(SuccessMessageMixin, LoginView):
         return super().form_invalid(form)
 
 
-class LoginFormView(SuccessMessageMixin, LogoutView):
+class LoginFormView(LogoutView):
     next_page = 'main-page'
     success_message = 'You have just logged out'
+
+
+class PassChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = "user_signup/password_change_form.html.html"
+    success_url = "/"
+
+    def form_valid(self, form):
+        messages.success(self.request,
+                         'Your Password Has Been Successfully Changed.')
+        return super().form_valid(form)

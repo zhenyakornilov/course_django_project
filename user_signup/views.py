@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetConfirmView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -100,3 +100,7 @@ class PassChangeView(PasswordChangeView):
         messages.success(self.request,
                          'Your Password Has Been Successfully Changed.')
         return super().form_valid(form)
+
+
+class SendPasswordResetEmailView(PasswordResetConfirmView):
+    template_name = 'user_signup/password_reset_confirm.html'

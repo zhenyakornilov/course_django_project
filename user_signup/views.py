@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth import login
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
@@ -9,6 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -16,7 +16,7 @@ from django.views.generic import View
 
 from django_kornilov.settings import EMAIL_HOST_USER
 
-from .forms import SignUpForm
+from .forms import PasswordCustomChangeForm, SignUpForm
 
 
 class SignUpView(View):
@@ -92,9 +92,9 @@ class LoginFormView(LogoutView):
 
 
 class PassChangeView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    template_name = "user_signup/password_change_form.html.html"
-    success_url = "/"
+    form_class = PasswordCustomChangeForm
+    template_name = "user_signup/password_change_form.html"
+    success_url = reverse_lazy('password_change_done')
 
     def form_valid(self, form):
         messages.success(self.request,

@@ -11,9 +11,12 @@
     <h2><a href="{% url 'currency-list' %}" style="color: black">Currency list</a></h2>
     {% if user.is_authenticated %}
         Hello, {{ user.username }}!
+        <br/>
+        <br/>
         <h4><a href="{% url 'logout' %}" style="color: darkslategray">Log Out</a></h4>
     {% else %}
         <h4>You are not logged in</h4>
+        <br/>
         <h4><a href="{% url 'login' %}" style="color: darkseagreen">Log In</a></h4>
     {% endif %}
 {% endblock %}

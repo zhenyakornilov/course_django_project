@@ -6,14 +6,14 @@ from pytest_django.asserts import assertTemplateUsed
 
 
 @pytest.mark.django_db
-def test_create_group_view(client):
-    response = client.get('/create-group/')
+def test_create_group_view(admin_client):
+    response = admin_client.get('/create-group/')
     assert response.status_code == 200
     assertTemplateUsed(response, 'group/create_group.html')
 
-    response = client.post('/create-group/',
-                           data={'group_name': 'Group name', 'students_in_group': 10},
-                           follow=True)
+    response = admin_client.post('/create-group/',
+                                 data={'group_name': 'Group name', 'students_in_group': 10},
+                                 follow=True)
 
     assert response.status_code == 200
     assert Group.objects.count() == 1
@@ -27,8 +27,8 @@ def test_create_group_view(client):
 
 
 @pytest.mark.django_db
-def test_all_groups_view(client):
-    response = client.get('/all-groups/')
+def test_all_groups_view(admin_client):
+    response = admin_client.get('/all-groups/')
     assert response.status_code == 200
     assertTemplateUsed(response, 'group/group_list.html')
     assert Group.objects.count() == 0

@@ -13,14 +13,14 @@ from students.tasks import delete_logs, generate_random_students
 @pytest.mark.django_db
 class TestStudentModelRelatedViews:
 
-    def test_create_student_view(self, client, create_student):
-        response = client.get('/create-student/')
+    def test_create_student_view(self, admin_client, create_student):
+        response = admin_client.get('/create-student/')
         assert response.status_code == 200
         assertTemplateUsed(response, 'students/create_student_form.html')
 
-        response = client.post('/create-student/', data={'first_name': 'Name', 'last_name': 'Surname',
-                                                         'age': 24, 'phone_number': '380000000000'},
-                               follow=True)
+        response = admin_client.post('/create-student/', data={'first_name': 'Name', 'last_name': 'Surname',
+                                                               'age': 24, 'phone_number': '380000000000'},
+                                     follow=True)
         assert response.status_code == 200
         assert Student.objects.count() == 2
         assert Student.objects.get(pk=2).first_name == 'Name'
@@ -31,22 +31,22 @@ class TestStudentModelRelatedViews:
         assert redirect_url == '/all-students/'
         assert redirect_status_code == 302
 
-    def test_all_students_view(self, client, create_student):
-        response = client.get('/all-students/')
+    def test_all_students_view(self, admin_client, create_student):
+        response = admin_client.get('/all-students/')
         assert response.status_code == 200
         assert Student.objects.get(pk=1).first_name in response.content.decode()
         assertTemplateUsed(response, 'students/students_list.html')
 
-    def test_edit_student_view(self, client, create_student):
+    def test_edit_student_view(self, admin_client, create_student):
         student = Student.objects.get(pk=1)
-        response = client.get(f'/edit-student/{student.pk}/')
+        response = admin_client.get(f'/edit-student/{student.pk}/')
         assert response.status_code == 200
         assertTemplateUsed(response, 'students/student_edit_form.html')
 
-        response = client.post(f'/edit-student/{student.pk}/',
-                               data={'first_name': 'Name', 'last_name': 'Surname',
-                                     'age': 24, 'phone_number': '380000000000'},
-                               follow=True)
+        response = admin_client.post(f'/edit-student/{student.pk}/',
+                                     data={'first_name': 'Name', 'last_name': 'Surname',
+                                           'age': 24, 'phone_number': '380000000000'},
+                                     follow=True)
         assert response.status_code == 200
         assert Student.objects.get(pk=1).first_name == 'Name'
 
@@ -55,9 +55,9 @@ class TestStudentModelRelatedViews:
         assert redirect_url == '/all-students/'
         assert redirect_status_code == 302
 
-    def test_delete_student_view(self, client, create_student):
+    def test_delete_student_view(self, admin_client, create_student):
         student = Student.objects.get(pk=1)
-        response = client.post(f'/delete-student/{student.pk}/', follow=True)
+        response = admin_client.post(f'/delete-student/{student.pk}/', follow=True)
         assert response.status_code == 200
 
         redirect_url = response.redirect_chain[0][0]
@@ -66,19 +66,19 @@ class TestStudentModelRelatedViews:
         assert redirect_status_code == 302
 
 
-def test_main_page(client):
-    response = client.get('/')
+def test_main_page(admin_client):
+    response = admin_client.get('/')
     assert response.status_code == 200
     assertTemplateUsed(response, 'students/index.html')
 
 
 @pytest.mark.django_db
-def test_generate_students_view_get(client):
-    response = client.get('/generate-students/', {'count': 0})
-    assert '<h1>Default value is 0</h1>'\
+def test_generate_students_view_get(admin_client):
+    response = admin_client.get('/generate-students/', {'count': 0})
+    assert '<h1>Default value is 0</h1>' \
            '<br>Enter positive number from 1 too 100' == response.content.decode()
 
-    response = client.get('/generate-students/', {'count': 100}, follow=True)
+    response = admin_client.get('/generate-students/', {'count': 100}, follow=True)
     assert Student.objects.count() == 100
     assert response.status_code == 200
 
@@ -109,10 +109,10 @@ def test_custom_error_404(client):
 
 
 @pytest.mark.django_db
-def test_handler_capitalize_student_fullname(client, create_student):
+def test_handler_capitalize_student_fullname(admin_client, create_student, admin_user):
     student = Student.objects.get(pk=1)
-    client.post(f'/edit-student/{student.pk}/',
-                data={'first_name': 'mad', 'last_name': 'max', 'age': 22})
+    admin_client.post(f'/edit-student/{student.pk}/',
+                      data={'first_name': 'mad', 'last_name': 'max', 'age': 22})
     assert Student.objects.get(pk=1).first_name == 'Mad'
     assert Student.objects.get(pk=1).last_name == 'Max'
 

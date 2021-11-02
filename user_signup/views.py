@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetConfirmView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView, PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -16,7 +17,7 @@ from django.views.generic import View
 
 from django_kornilov.settings import EMAIL_HOST_USER
 
-from .forms import PasswordCustomChangeForm, SignUpForm
+from .forms import PasswordCustomChangeForm, SetPasswordCustomForm, SignUpForm
 
 
 class SignUpView(View):
@@ -93,7 +94,7 @@ class LoginFormView(LogoutView):
 
 class PassChangeView(PasswordChangeView):
     form_class = PasswordCustomChangeForm
-    template_name = "user_signup/password_change_form.html"
+    template_name = "password/password_change_form.html"
     success_url = reverse_lazy('password_change_done')
 
     def form_valid(self, form):
@@ -102,5 +103,13 @@ class PassChangeView(PasswordChangeView):
         return super().form_valid(form)
 
 
-class SendPasswordResetEmailView(PasswordResetConfirmView):
-    template_name = 'user_signup/password_reset_confirm.html'
+class CustomPasswordResetView(PasswordResetView):
+    from_email = f'DJANGO_KORNILOV {EMAIL_HOST_USER}'
+    template_name = 'password/password_reset.html'
+    email_template_name = 'password/password_reset_email.html'
+    subject_template_name = 'password/reset_subject.txt'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = SetPasswordCustomForm
+    template_name = 'password/password_reset_confirm.html'

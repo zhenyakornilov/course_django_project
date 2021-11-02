@@ -11,18 +11,16 @@ urlpatterns = [
     path('password-change/', views.PassChangeView.as_view(), name='password_change'),
     path('password-change-success/',
          auth_view.PasswordChangeDoneView.as_view(
-             template_name='user_signup/password_change_done.html'), name='password_change_done'
+             template_name='password/password_change_done.html'), name='password_change_done'
          ),
     path('password-reset/',
-         auth_view.PasswordResetView.as_view(template_name='user_signup/password_reset.html'),
-         name='password_reset'),
+         views.CustomPasswordResetView.as_view(), name='password_reset'),
     path('password-reset/done/',
-         auth_view.PasswordResetDoneView.as_view(template_name='user_signup/password_reset_done.html'),
+         auth_view.PasswordResetDoneView.as_view(template_name='password/password_reset_done.html'),
          name='password_reset_done'),
     path('reset/<uidb64>/<token>/',
-         auth_view.PasswordResetConfirmView.as_view(template_name='user_signup/password_reset_confirm.html'),
-         name='password_reset_confirm'),
+         views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/',
-         auth_view.PasswordResetCompleteView.as_view(template_name='user_signup/password_reset_complete.html'),
+         auth_view.PasswordResetCompleteView.as_view(template_name='password/password_reset_complete.html'),
          name='password_reset_complete')
 ]

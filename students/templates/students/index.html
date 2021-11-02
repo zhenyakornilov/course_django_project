@@ -14,10 +14,12 @@
         <br/>
         <br/>
         <h4><a href="{% url 'logout' %}" style="color: darkslategray">Log Out</a></h4>
+        <h4><a href="{% url 'password_change' %}" style="color: darkslategray">Change your password</a></h4>
     {% else %}
         <h4>You are not logged in</h4>
         <br/>
-        <h4><a href="{% url 'login' %}" style="color: darkseagreen">Log In</a></h4>
+        <h4><a href="{% url 'login' %}" style="color: darkseagreen">Log In</a> |
+            <a href="{% url 'password_reset' %}" style="color: wheat">Forgot your password?</a></h4>
     {% endif %}
 {% endblock %}
 

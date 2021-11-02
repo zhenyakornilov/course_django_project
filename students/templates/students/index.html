@@ -18,8 +18,8 @@
     {% else %}
         <h4>You are not logged in</h4>
         <br/>
-        <h4><a href="{% url 'login' %}" style="color: darkseagreen">Log In</a> |
-            <a href="{% url 'password_reset' %}" style="color: wheat">Forgot your password?</a></h4>
+        <h4 style="color: wheat"><a href="{% url 'login' %}" style="color: darkseagreen">Log In</a> |
+            <a href="{% url 'password_reset' %}" style="color: darkseagreen">Forgot your password?</a></h4>
     {% endif %}
 {% endblock %}
 

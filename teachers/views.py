@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -8,7 +9,7 @@ from .forms import TeacherForm
 from .models import Teacher
 
 
-class CreateTeacherView(CreateView):
+class CreateTeacherView(LoginRequiredMixin, CreateView):
     form_class = TeacherForm
     template_name = 'teachers/create_teacher_form.html'
 
@@ -17,14 +18,14 @@ class CreateTeacherView(CreateView):
         return redirect('all-teachers')
 
 
-class EditTeacherView(UpdateView):
+class EditTeacherView(LoginRequiredMixin, UpdateView):
     model = Teacher
     template_name = 'teachers/teacher_edit_form.html'
     form_class = TeacherForm
     success_url = reverse_lazy('all-teachers')
 
 
-class DeleteTeacherView(DeleteView):
+class DeleteTeacherView(LoginRequiredMixin, DeleteView):
     model = Teacher
     success_url = reverse_lazy('all-teachers')
 

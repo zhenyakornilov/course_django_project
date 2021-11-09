@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Sign up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <str>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% if field.html_name == 'email' %}
+          <small style="color: black">{{ field.help_text }}</small>
+          {{ form.email.errors }}
+        {% endif %}
+        {% if error in form.errors %}
+            <strong style="color: black">{{ error }}</strong>
+        {% endif %}
+        {% if error in field.errors %}
+          <p style="color: black">{{ error }}</p>
+        {% endif %}
+      </p>
+    {% endfor %}
+    <button type="submit">Sign up</button>
+    <br><br>
+    <a href="{% url "main-page" %}" style="color: black">Main page</a>
+  </form>
+{% endblock %}
+

@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
@@ -6,7 +7,7 @@ from . forms import GroupForm
 from .models import Group
 
 
-class CreateGroupView(CreateView):
+class CreateGroupView(LoginRequiredMixin, CreateView):
     form_class = GroupForm
     template_name = 'group/create_group.html'
 

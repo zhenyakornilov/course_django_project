@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -17,7 +18,7 @@ class MainPage(View):
         return render(request, 'students/index.html')
 
 
-class CreateStudentView(CreateView):
+class CreateStudentView(LoginRequiredMixin, CreateView):
     form_class = StudentForm
     template_name = 'students/create_student_form.html'
 
@@ -26,7 +27,7 @@ class CreateStudentView(CreateView):
         return redirect('all-students')
 
 
-class GenerateStudentsView(View):
+class GenerateStudentsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         fake = Faker()
         count = self.request.GET.get('count', '0')
@@ -45,14 +46,14 @@ class GenerateStudentsView(View):
             return HttpResponse('<h3>Enter positive number from 1 too 100</h3>')
 
 
-class EditStudentView(UpdateView):
+class EditStudentView(LoginRequiredMixin, UpdateView):
     model = Student
     template_name = 'students/student_edit_form.html'
     form_class = StudentForm
     success_url = reverse_lazy('all-students')
 
 
-class DeleteStudentView(DeleteView):
+class DeleteStudentView(LoginRequiredMixin, DeleteView):
     model = Student
     success_url = reverse_lazy('all-students')
 
@@ -87,7 +88,7 @@ class StudentsListView(ListView):
         return queryset
 
 
-class GenerateStudentsFormView(FormView):
+class GenerateStudentsFormView(LoginRequiredMixin, FormView):
     template_name = 'students/student_generator.html'
     form_class = GenerateStudentsForm
 

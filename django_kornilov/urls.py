@@ -27,6 +27,7 @@ urlpatterns = [
     path("", include("teachers.urls")),
     path("", include("mail_processing.urls")),
     path("", include("currency.urls")),
+    path("accounts/", include("user_signup.urls")),
 ]
 handler404 = "students.views.handler404"
 handler500 = "students.views.handler500"

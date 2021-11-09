@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'TEST')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["zhenyakornilov.herokuapp.com", "127.0.0.1", "localhost"]
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "group.apps.GroupConfig",
     "mail_processing.apps.MailProcessingConfig",
     "currency.apps.CurrencyConfig",
+    "user_signup.apps.UserSignupConfig",
 ]
 
 MIDDLEWARE = [
@@ -182,3 +183,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+LOGIN_REDIRECT_URL = 'main-page'

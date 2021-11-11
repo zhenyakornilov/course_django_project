@@ -21,7 +21,6 @@ services:
       - "8000:8000"
     environment:
       - CELERY_BROKER=pyamqp://guest@rabbitmq//
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
     command: python manage.py runserver 0.0.0.0:8000
     container_name: django
     volumes:
@@ -48,7 +47,6 @@ services:
       - django:/django_kornilov
     environment:
       - CELERY_BROKER=pyamqp://guest@rabbitmq//
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
     depends_on:
       - web
       - rabbitmq
@@ -61,7 +59,6 @@ services:
       - django:/django_kornilov
     environment:
       - CELERY_BROKER=pyamqp://guest@rabbitmq//
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
     depends_on:
       - web
       - rabbitmq

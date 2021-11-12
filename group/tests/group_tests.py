@@ -5,7 +5,7 @@ import pytest
 from pytest_django.asserts import assertTemplateUsed
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_create_group_view(admin_client):
     response = admin_client.get('/create-group/')
     assert response.status_code == 200
@@ -26,7 +26,7 @@ def test_create_group_view(admin_client):
     assert redirect_status_code == 302
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_all_groups_view(admin_client):
     response = admin_client.get('/all-groups/')
     assert response.status_code == 200

@@ -11,9 +11,9 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ("last_name__startswith",)
 
     def get_group_id(self, obj):
-        return f"Group ID: {obj.in_group.id}"
+        return f"Group ID: {obj.group.id}"
     get_group_id.short_description = 'Group ID'
 
     def get_group_name(self, obj):
-        return obj.in_group.group_name
+        return obj.group.group_name
     get_group_name.short_description = 'Group name'

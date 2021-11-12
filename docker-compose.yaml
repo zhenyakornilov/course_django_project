@@ -21,6 +21,7 @@ services:
       - "8000:8000"
     environment:
       - CELERY_BROKER=pyamqp://guest@rabbitmq//
+      - DB_HOST=pgdb
     command: python manage.py runserver 0.0.0.0:8000
     container_name: django
     volumes:
@@ -47,6 +48,7 @@ services:
       - django:/django_kornilov
     environment:
       - CELERY_BROKER=pyamqp://guest@rabbitmq//
+      - DB_HOST=pgdb
     depends_on:
       - web
       - rabbitmq
@@ -59,6 +61,7 @@ services:
       - django:/django_kornilov
     environment:
       - CELERY_BROKER=pyamqp://guest@rabbitmq//
+      - DB_HOST=pgdb
     depends_on:
       - web
       - rabbitmq

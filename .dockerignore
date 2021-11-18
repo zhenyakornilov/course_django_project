@@ -1,0 +1,44 @@
+.env
+.env.example
+
+# Virtualenv
+venv
+
+# Git
+.git
+.gitignore
+
+# Pycharm
+.idea
+
+# Travis CI
+.travis.yml
+
+# Docker
+docker-compose.yaml
+
+# Procfile for Heroku
+Procfile
+Procfile.windows
+runtime.txt
+
+# flake8
+tox.ini
+
+# Pytest
+pytest.ini
+.pytest_cache
+.coverage
+
+# static files
+/static
+
+README.md
+
+__pycache__
+
+# Celery
+celery*
+
+# Database
+db*

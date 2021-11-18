@@ -10,7 +10,7 @@ from students.models import Logger, Student
 from students.tasks import delete_logs, generate_random_students
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 class TestStudentModelRelatedViews:
 
     def test_create_student_view(self, admin_client, create_student):
@@ -72,7 +72,7 @@ def test_main_page(admin_client):
     assertTemplateUsed(response, 'students/index.html')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_generate_students_view_get(admin_client):
     response = admin_client.get('/generate-students/', {'count': 0})
     assert '<h1>Default value is 0</h1>' \
@@ -89,7 +89,7 @@ def test_generate_students_view_get(admin_client):
 
 
 @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_generate_random_students(create_student):
     task = generate_random_students.delay(3)
     assert task.result == '3 random students created with success!'
@@ -108,7 +108,7 @@ def test_custom_error_404(client):
     assertTemplateUsed(response, './errors/404_error_handler.html')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_handler_capitalize_student_fullname(admin_client, create_student, admin_user):
     student = Student.objects.get(pk=1)
     admin_client.post(f'/edit-student/{student.pk}/',
@@ -118,7 +118,7 @@ def test_handler_capitalize_student_fullname(admin_client, create_student, admin
 
 
 @override_settings(CELERY_TASK_ALWAYS_EAGER=True)
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_delete_logs(admin_client, create_log):
     assert Logger.objects.count() == 1
     admin_client.get('/admin/')

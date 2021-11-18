@@ -11,7 +11,7 @@ class Student(models.Model):
                                  db_column="Group ID", verbose_name='Group ID')
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['id']
 
     def __str__(self):
         return f'First name: {self.first_name}, ' \

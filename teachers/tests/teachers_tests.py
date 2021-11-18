@@ -5,7 +5,7 @@ from pytest_django.asserts import assertTemplateUsed
 from teachers.models import Teacher
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 class TestStudentModelRelatedViews:
 
     def test_create_teacher_view(self, admin_client, create_teacher):
@@ -60,7 +60,7 @@ class TestStudentModelRelatedViews:
         assert redirect_status_code == 302
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(reset_sequences=True)
 def test_handler_capitalize_teacher_fullname(admin_client, create_teacher):
     teacher = Teacher.objects.get(pk=1)
     admin_client.post(f'/edit-teacher/{teacher.pk}/',

@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+
+  pgdb:
+    image: postgres
+    container_name: pgdb
+    environment:
+      - POSTGRES_DB=db.postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - CELERY_BROKER=pyamqp://guest@rabbitmq//
+      - DB_HOST=pgdb
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: django
+    volumes:
+      - django:/django_kornilov
+    depends_on:
+      - rabbitmq
+      - pgdb
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  celery-worker:
+    build: .
+    restart: always
+    command: 'celery -A django_kornilov worker -l INFO'
+    volumes:
+      - django:/django_kornilov
+    environment:
+      - CELERY_BROKER=pyamqp://guest@rabbitmq//
+      - DB_HOST=pgdb
+    depends_on:
+      - web
+      - rabbitmq
+
+
+  celery-beat:
+    build: .
+    command: 'celery -A django_kornilov beat -l INFO'
+    volumes:
+      - django:/django_kornilov
+    environment:
+      - CELERY_BROKER=pyamqp://guest@rabbitmq//
+      - DB_HOST=pgdb
+    depends_on:
+      - web
+      - rabbitmq
+
+
+volumes:
+  django:
+  pgdata:

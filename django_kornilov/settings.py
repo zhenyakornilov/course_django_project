@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'TEST')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["zhenyakornilov.herokuapp.com", "127.0.0.1", "localhost"]
 
@@ -90,12 +90,22 @@ TEMPLATES = [
 WSGI_APPLICATION = "django_kornilov.wsgi.application"
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
+# Postgres
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "db.postgres",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": os.environ.get('DB_HOST', 'localhost'),
+        "PORT": "5432"
     }
 }
 
@@ -153,7 +163,7 @@ INTERNAL_IPS = [
 
 # Celery settings
 # previous celery broker settings: "pyamqp://guest@localhost//"
-CELERY_BROKER_URL = os.getenv('CLOUDAMQP_URL', "pyamqp://guest@localhost//")
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER', "pyamqp://guest@localhost//")
 CELERY_TIMEZONE = "Europe/Kiev"
 CELERY_TASK_TRACK_STARTED = True
 TEST_RUNNER = 'djcelery.contrib.test_runner.CeleryTestSuiteRunner'

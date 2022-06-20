@@ -100,8 +100,8 @@ WSGI_APPLICATION = "django_kornilov.wsgi.application"
 # Postgres
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "db.postgres",
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("DB_NAME", "db.sqlite3"),
         "USER": "postgres",
         "PASSWORD": "postgres",
         "HOST": os.environ.get('DB_HOST', 'localhost'),

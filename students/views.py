@@ -64,7 +64,7 @@ class DeleteStudentView(LoginRequiredMixin, DeleteView):
 class StudentsListView(ListView):
     model = Student
     template_name = 'students/students_list.html'
-    paginate_by = 20
+    paginate_by = 6
 
     def get_queryset(self):
         filter_params = {}

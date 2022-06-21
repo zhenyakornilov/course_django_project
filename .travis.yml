@@ -1,6 +1,11 @@
 language: python
 python:
   - "3.9"
+  - "3.8"
+  - "3.7"
+
+before_install:
+  - pip install poetry
 install:
   - poetry install
 env:
@@ -18,7 +23,6 @@ services:
   - postgresql
 
 before_script:
-  - pip install poetry
   - psql -c 'create database travis_ci_test;' -U postgres
 
 

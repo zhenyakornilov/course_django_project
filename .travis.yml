@@ -16,7 +16,7 @@ script:
   - poetry run python manage.py validate_templates
   - poetry run python manage.py check
   - poetry run python manage.py makemigrations --check --dry-run
-  - poetry run pip check
+  - poetry check
   - poetry run pytest -s
 
 services:
